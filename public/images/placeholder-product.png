@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+  <!-- Background with gradient -->
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f5f7fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c3cfe2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="300" height="300" fill="url(#grad)"/>
+  
+  <!-- Product box icon -->
+  <path d="M100 80 L200 80 L220 120 L80 120 Z" fill="#ff523b" opacity="0.9"/>
+  <path d="M85 120 L215 120 L215 220 L85 220 Z" fill="#ff523b" opacity="0.8"/>
+  
+  <!-- Camera icon -->
+  <circle cx="150" cy="150" r="25" fill="#fff" opacity="0.9"/>
+  <circle cx="150" cy="150" r="18" fill="#ff523b" opacity="0.9"/>
+  <circle cx="150" cy="150" r="12" fill="#fff" opacity="0.9"/>
+  
+  <!-- Text -->
+  <text x="150" y="180" font-family="Arial" font-size="16" fill="#fff" text-anchor="middle">Product Image</text>
+  <text x="150" y="200" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">Currently Unavailable</text>
+  
+  <!-- Decorative elements -->
+  <circle cx="150" cy="90" r="5" fill="#fff" opacity="0.6"/>
+  <rect x="140" y="230" width="20" height="3" fill="#fff" opacity="0.6"/>
+  
+  <!-- Corner accents -->
+  <path d="M80 80 L100 80 L100 85 L85 85 L85 100 L80 100 Z" fill="#fff" opacity="0.4"/>
+  <path d="M220 80 L200 80 L200 85 L215 85 L215 100 L220 100 Z" fill="#fff" opacity="0.4"/>
+  <path d="M80 220 L100 220 L100 215 L85 215 L85 200 L80 200 Z" fill="#fff" opacity="0.4"/>
+  <path d="M220 220 L200 220 L200 215 L215 215 L215 200 L220 200 Z" fill="#fff" opacity="0.4"/>
+</svg>

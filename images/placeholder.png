@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#f0f0f0"/>
+  <path d="M82 88h36v24H82z" fill="#fff"/>
+  <path d="M100 76c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm0 44c-11.046 0-20-8.954-20-20s8.954-20 20-20 20 8.954 20 20-8.954 20-20 20z" fill="#ccc"/>
+  <path d="M98 84h4v28h-4z" fill="#ccc"/>
+  <path d="M84 98h32v4H84z" fill="#ccc"/>
+  <text x="100" y="150" font-family="Arial" font-size="14" fill="#999" text-anchor="middle">Image Unavailable</text>
+</svg>
