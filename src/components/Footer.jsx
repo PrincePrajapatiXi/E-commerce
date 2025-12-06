@@ -9,11 +9,11 @@ const Footer = () => {
                     {/* Policies */}
                     <div>
                         <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4">Policies</h3>
-                        <ul className="space-y-1.5 sm:space-y-2">
-                            <li><Link to="/privacy" className="text-gray-400 hover:text-white transition text-xs sm:text-sm md:text-base">Privacy Policy</Link></li>
-                            <li><Link to="/terms" className="text-gray-400 hover:text-white transition text-xs sm:text-sm md:text-base">Terms of Service</Link></li>
-                            <li><Link to="/returns" className="text-gray-400 hover:text-white transition text-xs sm:text-sm md:text-base">Return Policy</Link></li>
-                            <li><Link to="/refund" className="text-gray-400 hover:text-white transition text-xs sm:text-sm md:text-base">Refund Policy</Link></li>
+                        <ul className="space-y-2 sm:space-y-2">
+                            <li><Link to="/privacy" className="text-gray-400 hover:text-white transition-all transform hover:translate-x-1 inline-block text-sm sm:text-base md:text-base min-h-[44px] flex items-center justify-center md:justify-start">Privacy Policy</Link></li>
+                            <li><Link to="/terms" className="text-gray-400 hover:text-white transition-all transform hover:translate-x-1 inline-block text-sm sm:text-base md:text-base min-h-[44px] flex items-center justify-center md:justify-start">Terms of Service</Link></li>
+                            <li><Link to="/returns" className="text-gray-400 hover:text-white transition-all transform hover:translate-x-1 inline-block text-sm sm:text-base md:text-base min-h-[44px] flex items-center justify-center md:justify-start">Return Policy</Link></li>
+                            <li><Link to="/refund" className="text-gray-400 hover:text-white transition-all transform hover:translate-x-1 inline-block text-sm sm:text-base md:text-base min-h-[44px] flex items-center justify-center md:justify-start">Refund Policy</Link></li>
                         </ul>
                     </div>
 
@@ -30,10 +30,10 @@ const Footer = () => {
                     <div>
                         <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4">Follow Us</h3>
                         <div className="flex justify-center md:justify-start space-x-4 sm:space-x-6">
-                            <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-xl sm:text-2xl transition">
+                            <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-2xl sm:text-2xl transition-all transform hover:scale-110 min-h-[44px] min-w-[44px] flex items-center justify-center">
                                 <i className="fab fa-discord"></i>
                             </a>
-                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-xl sm:text-2xl transition">
+                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-2xl sm:text-2xl transition-all transform hover:scale-110 min-h-[44px] min-w-[44px] flex items-center justify-center">
                                 <i className="fab fa-instagram"></i>
                             </a>
                         </div>

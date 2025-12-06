@@ -105,11 +105,11 @@ export const products = [
         category: "mobile",
         images: [
             "/images/Iphone 16 pro max.png",
-            "/images/Iphone 16 pro max 2.jpg",
-            "/images/Iphone 16 pro max 3.jpg",
-            "/images/Iphone 16 pro max 4.jpg",
-            "/images/Iphone 16 pro max 5.jpg",
-            "/images/Iphone 16 pro max 6.jpg"
+            "/images/iPhone 16 Pro Max 2.jpg",
+            "/images/iPhone 16 Pro Max 3.jpg",
+            "/images/iPhone 16 Pro Max 4.jpg",
+            "/images/iPhone 16 Pro Max 5.jpg",
+            "/images/iPhone 16 Pro Max 6.jpg"
         ],
         features: [
             "A18 Pro Chip",
@@ -128,9 +128,9 @@ export const products = [
             ],
             color: [
                 { name: "Black Titanium", image: "/images/Iphone 16 pro max.png" },
-                { name: "Natural Titanium", image: "/images/Iphone 16 pro max 2.jpg" },
-                { name: "White Titanium", image: "/images/Iphone 16 pro max 3.jpg" },
-                { name: "Blue Titanium", image: "/images/Iphone 16 pro max 4.jpg" }
+                { name: "Natural Titanium", image: "/images/iPhone 16 Pro Max 2.jpg" },
+                { name: "White Titanium", image: "/images/iPhone 16 Pro Max 3.jpg" },
+                { name: "Blue Titanium", image: "/images/iPhone 16 Pro Max 4.jpg" }
             ]
         }
     },

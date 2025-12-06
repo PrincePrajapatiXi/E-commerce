@@ -29,26 +29,26 @@ const ProductDetails = () => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
                 {/* Image Gallery */}
-                <div className="space-y-4">
-                    <div className="bg-white rounded-lg overflow-hidden border border-gray-200">
+                <div className="space-y-3 sm:space-y-4">
+                    <div className="bg-white rounded-xl overflow-hidden border-2 border-gray-200 shadow-card hover:shadow-card-hover transition-all">
                         <img
                             src={product.images[selectedImage]}
                             alt={product.name}
                             loading="lazy"
-                            className="w-full h-96 object-contain"
+                            className="w-full h-64 sm:h-80 md:h-96 object-contain transition-transform duration-500"
                         />
                     </div>
-                    <div className="grid grid-cols-4 gap-4">
+                    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-4 gap-2 sm:gap-3">
                         {product.images.map((img, idx) => (
                             <button
                                 key={idx}
                                 onClick={() => setSelectedImage(idx)}
-                                className={`border-2 rounded-md overflow-hidden ${selectedImage === idx ? 'border-primary' : 'border-transparent'}`}
+                                className={`border-2 rounded-lg overflow-hidden transition-all transform hover:scale-105 min-h-[44px] ${selectedImage === idx ? 'border-primary shadow-md' : 'border-gray-200 hover:border-gray-300'}`}
                             >
-                                <img src={img} alt="" loading="lazy" className="w-full h-20 object-contain bg-white" />
+                                <img src={img} alt="" loading="lazy" className="w-full h-16 sm:h-20 object-contain bg-white" />
                             </button>
                         ))}
                     </div>
@@ -85,11 +85,11 @@ const ProductDetails = () => {
                         )}
                     </div>
 
-                    <div className="flex items-center space-x-4 mb-8">
-                        <div className="flex items-center border border-gray-300 rounded-md">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-8">
+                        <div className="flex items-center border-2 border-gray-300 rounded-lg w-full sm:w-auto">
                             <button
                                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                className="px-3 py-2 hover:bg-gray-100"
+                                className="px-4 py-3 hover:bg-gray-100 transition-colors font-semibold text-lg min-w-[44px] min-h-[44px]"
                             >
                                 -
                             </button>
@@ -97,11 +97,11 @@ const ProductDetails = () => {
                                 type="number"
                                 value={quantity}
                                 readOnly
-                                className="w-12 text-center border-none focus:ring-0"
+                                className="w-16 text-center border-none focus:ring-0 font-semibold"
                             />
                             <button
                                 onClick={() => setQuantity(quantity + 1)}
-                                className="px-3 py-2 hover:bg-gray-100"
+                                className="px-4 py-3 hover:bg-gray-100 transition-colors font-semibold text-lg min-w-[44px] min-h-[44px]"
                             >
                                 +
                             </button>
@@ -110,9 +110,9 @@ const ProductDetails = () => {
                         <button
                             onClick={handleAddToCart}
                             disabled={added}
-                            className={`flex-1 flex items-center justify-center px-8 py-3 rounded-md font-semibold transition-all duration-300 ${added
-                                ? 'bg-green-500 text-white'
-                                : 'bg-primary hover:bg-red-600 text-white'
+                            className={`flex-1 flex items-center justify-center px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 min-h-[44px] ${added
+                                ? 'bg-green-500 text-white shadow-lg'
+                                : 'bg-gradient-primary hover:shadow-glow text-white'
                                 }`}
                         >
                             {added ? (

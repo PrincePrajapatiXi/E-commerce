@@ -29,22 +29,22 @@ const Products = () => {
     }, [filter, searchQuery]);
 
     return (
-        <div className="bg-gray-50 py-8 sm:py-12 md:py-16">
+        <div className="bg-gradient-to-br from-gray-50 to-gray-100 py-10 sm:py-12 md:py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Page Title */}
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-6 sm:mb-8 md:mb-12">
+                <h1 className="text-3xl sm:text-4xl md:text-4xl font-bold text-center mb-8 sm:mb-10 md:mb-12 animate-fadeIn">
                     Our Products
                 </h1>
 
                 {/* Filters */}
-                <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-12">
+                <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-8 sm:mb-10 md:mb-12">
                     {['all', 'laptop', 'monitor', 'accessory', 'mobile', 'gaming'].map(cat => (
                         <button
                             key={cat}
                             onClick={() => setFilter(cat)}
-                            className={`px-3 py-1 sm:px-4 sm:py-2 md:px-6 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${filter === cat
-                                ? 'bg-primary text-white shadow-md'
-                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                            className={`px-4 py-2 sm:px-5 sm:py-2 md:px-6 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 transform hover:scale-105 min-h-[44px] ${filter === cat
+                                ? 'bg-gradient-primary text-white shadow-glow'
+                                : 'bg-white text-gray-600 hover:bg-gray-200 shadow-md'
                                 }`}
                         >
                             {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -68,7 +68,7 @@ const Products = () => {
                 )}
 
                 {/* Products Grid */}
-                <div className="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                     {filteredProducts.map(product => (
                         <ProductCard key={product.id} product={product} />
                     ))}
@@ -76,11 +76,11 @@ const Products = () => {
 
                 {/* No Results Message */}
                 {filteredProducts.length === 0 && (
-                    <div className="text-center py-12">
-                        <p className="text-gray-600 text-lg">No products found{searchQuery && ` for "${searchQuery}"`}</p>
+                    <div className="text-center py-12 animate-fadeIn">
+                        <p className="text-gray-600 text-lg mb-4">No products found{searchQuery && ` for "${searchQuery}"`}</p>
                         <button
                             onClick={() => window.location.href = '/products'}
-                            className="mt-4 bg-primary text-white px-6 py-2 rounded-lg hover:bg-red-600 transition"
+                            className="bg-gradient-primary text-white px-8 py-3 rounded-lg hover:shadow-glow transition-all transform hover:-translate-y-1 min-h-[44px]"
                         >
                             View All Products
                         </button>
