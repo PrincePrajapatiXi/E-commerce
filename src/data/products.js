@@ -190,12 +190,12 @@ export const products = [
         rating: 5,
         category: "laptop",
         images: [
-            "/images/macbook-air-m4-1.png",
-            "/images/MacBook Air M4 2.jpg", 
-            "/images/MacBook Air M4 3.jpg", 
-            "/images/MacBook Air M4 4.jpg", 
-            "/images/MacBook Air M4 5.jpg", 
-            "/images/MacBook Air M4 6.jpg", 
+            "/images/MacBook Air M4 1.png",
+            "/images/MacBook Air M4 2.jpg",
+            "/images/MacBook Air M4 3.jpg",
+            "/images/MacBook Air M4 4.jpg",
+            "/images/MacBook Air M4 5.jpg",
+            "/images/MacBook Air M4 6.jpg",
         ],
         features: [
             "M4 Chip",
