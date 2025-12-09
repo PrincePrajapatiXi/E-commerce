@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { products } from '../data/products';
+import TrustBadges from '../components/TrustBadges';
 
 const Home = () => {
     const [filter, setFilter] = useState('all');
@@ -62,6 +63,9 @@ const Home = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Trust Badges */}
+            <TrustBadges />
 
             {/* Featured Products */}
             <div id="featured" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

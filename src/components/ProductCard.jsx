@@ -1,19 +1,58 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Star, ShoppingCart, Eye } from 'lucide-react';
+import { Star, ShoppingCart, Eye, Heart } from 'lucide-react';
+import { useWishlist } from '../context/WishlistContext';
 
 const ProductCard = ({ product }) => {
     const [isAdding, setIsAdding] = useState(false);
+    const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+    const inWishlist = isInWishlist(product.id);
 
     const handleQuickView = (e) => {
         e.preventDefault();
         // This would open a modal in a real implementation
     };
 
+    const handleWishlistToggle = (e) => {
+        e.preventDefault();
+        if (inWishlist) {
+            removeFromWishlist(product.id);
+        } else {
+            addToWishlist(product);
+        }
+    };
+
     return (
         <div className="bg-white p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-card hover:shadow-card-hover transition-all duration-300 flex flex-col h-full transform hover:-translate-y-2 group relative overflow-hidden">
+            {/* Stock Badge */}
+            {product.stock !== undefined && (
+                <div className="absolute top-2 left-2 z-10">
+                    {product.stock > 10 ? (
+                        <span className="bg-success/90 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                            In Stock
+                        </span>
+                    ) : product.stock > 0 ? (
+                        <span className="bg-warning/90 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                            Only {product.stock} left
+                        </span>
+                    ) : (
+                        <span className="bg-error/90 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                            Out of Stock
+                        </span>
+                    )}
+                </div>
+            )}
+
             {/* Hover overlay with actions */}
             <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-2">
+                <button
+                    onClick={handleWishlistToggle}
+                    className={`bg-white/90 backdrop-blur-sm p-2 rounded-lg shadow-lg transition-all duration-200 transform hover:scale-110 ${inWishlist ? 'text-red-500 hover:bg-red-50' : 'hover:bg-primary hover:text-white'
+                        }`}
+                    aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+                >
+                    <Heart size={16} className={inWishlist ? 'fill-current' : ''} />
+                </button>
                 <button
                     onClick={handleQuickView}
                     className="bg-white/90 backdrop-blur-sm p-2 rounded-lg shadow-lg hover:bg-primary hover:text-white transition-all duration-200 transform hover:scale-110"
@@ -47,8 +86,8 @@ const ProductCard = ({ product }) => {
                             key={i}
                             size={14}
                             className={`sm:w-4 sm:h-4 transition-all duration-200 ${i < product.rating
-                                    ? 'text-yellow-400 fill-current'
-                                    : 'text-gray-300'
+                                ? 'text-yellow-400 fill-current'
+                                : 'text-gray-300'
                                 }`}
                         />
                     ))}
