@@ -47,10 +47,11 @@ const Home = () => {
                                 Discover cutting-edge technology that transforms your daily experience. From powerful laptops to sleek smartphones.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
-                                <a href="#featured" className="bg-gradient-primary hover:shadow-glow text-white px-6 py-3 sm:px-8 sm:py-3 rounded-full text-sm sm:text-base font-semibold transition-all shadow-lg transform hover:-translate-y-1 hover:scale-105 min-h-[44px] flex items-center justify-center">
-                                    Shop Now &#x2192;
+                                <a href="#featured" className="bg-gradient-primary hover:shadow-glow-lg text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full text-sm sm:text-base font-semibold transition-all shadow-button transform hover:-translate-y-1 hover:scale-105 min-h-[44px] flex items-center justify-center gap-2 btn-ripple group">
+                                    <span>Shop Now</span>
+                                    <span className="transform group-hover:translate-x-1 transition-transform">→</span>
                                 </a>
-                                <a href="#special-offers" className="bg-white text-gray-800 border-2 border-gray-300 hover:border-primary hover:bg-gray-50 px-6 py-3 sm:px-8 sm:py-3 rounded-full text-sm sm:text-base font-semibold transition-all transform hover:-translate-y-1 min-h-[44px] flex items-center justify-center">
+                                <a href="#special-offers" className="bg-white text-gray-800 border-2 border-gray-300 hover:border-primary hover:bg-primary hover:text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full text-sm sm:text-base font-semibold transition-all transform hover:-translate-y-1 shadow-button min-h-[44px] flex items-center justify-center btn-ripple">
                                     View Deals
                                 </a>
                             </div>
@@ -75,9 +76,9 @@ const Home = () => {
                         <button
                             key={cat}
                             onClick={() => setFilter(cat)}
-                            className={`px-4 py-2 sm:px-5 sm:py-2 md:px-6 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 transform hover:scale-105 min-h-[44px] ${filter === cat
-                                ? 'bg-gradient-primary text-white shadow-glow'
-                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                            className={`px-4 py-2.5 sm:px-6 sm:py-3 md:px-7 md:py-3 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 transform hover:scale-105 min-h-[44px] btn-ripple shadow-sm ${filter === cat
+                                ? 'bg-gradient-primary text-white shadow-glow hover:shadow-glow-lg'
+                                : 'bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-200 hover:border-primary/50'
                                 }`}
                         >
                             {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -123,8 +124,9 @@ const Home = () => {
                                     <span className="text-3xl sm:text-4xl md:text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">₹ 89,999</span>
                                     <span className="text-base sm:text-lg md:text-xl text-gray-400 line-through mb-1">₹ 1,29,999</span>
                                 </div>
-                                <Link to="/product/11" className="bg-gradient-dark hover:shadow-glow-lg text-white px-6 py-3 sm:px-8 sm:py-3 md:px-8 md:py-3 rounded-lg text-sm sm:text-base font-semibold transition-all w-fit inline-block transform hover:-translate-y-1 hover:scale-105 min-h-[44px] flex items-center justify-center">
-                                    Grab Deal Now
+                                <Link to="/product/11" className="bg-gradient-dark hover:shadow-glow-lg text-white px-6 py-3 sm:px-8 sm:py-4 md:px-10 md:py-4 rounded-xl text-sm sm:text-base font-bold transition-all w-fit inline-flex items-center justify-center gap-2 transform hover:-translate-y-1 hover:scale-105 min-h-[44px] shadow-button-hover btn-ripple group">
+                                    <span>Grab Deal Now</span>
+                                    <span className="transform group-hover:translate-x-1 transition-transform">→</span>
                                 </Link>
                             </div>
                             <div className="md:w-1/2 bg-gradient-to-br from-gray-100 to-gray-200 relative min-h-[250px] sm:min-h-[300px]">
