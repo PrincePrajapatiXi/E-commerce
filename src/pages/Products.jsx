@@ -5,11 +5,16 @@ import SEO from '../components/SEO';
 import { products } from '../data/products';
 
 const Products = () => {
-    const [filter, setFilter] = useState('all');
-    const [priceRange, setPriceRange] = useState({ min: 0, max: 200000 });
-    const [filteredProducts, setFilteredProducts] = useState(products);
     const location = useLocation();
     const searchQuery = location.state?.searchQuery || '';
+    const [filter, setFilter] = useState(location.state?.category || 'all');
+
+    // Update filter if location state changes (for in-page navigation or re-navigation)
+    useEffect(() => {
+        if (location.state?.category) {
+            setFilter(location.state.category);
+        }
+    }, [location.state]);
 
     useEffect(() => {
         let result = products.filter(p => p.id !== 11); // Exclude Samsung (ID 11)

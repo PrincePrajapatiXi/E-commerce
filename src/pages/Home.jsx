@@ -60,10 +60,10 @@ const Home = () => {
                                 Discover cutting-edge technology that transforms your daily experience. From powerful laptops to sleek smartphones.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
-                                <a href="#featured" className="bg-gradient-primary hover:shadow-glow-lg text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full text-sm sm:text-base font-semibold transition-all shadow-button transform hover:-translate-y-1 hover:scale-105 min-h-[44px] flex items-center justify-center gap-2 btn-ripple group">
+                                <Link to="/products" className="bg-gradient-primary hover:shadow-glow-lg text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full text-sm sm:text-base font-semibold transition-all shadow-button transform hover:-translate-y-1 hover:scale-105 min-h-[44px] flex items-center justify-center gap-2 btn-ripple group">
                                     <span>Shop Now</span>
                                     <span className="transform group-hover:translate-x-1 transition-transform">→</span>
-                                </a>
+                                </Link>
                                 <a href="#special-offers" className="bg-white text-gray-800 border-2 border-gray-300 hover:border-primary hover:bg-primary hover:text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full text-sm sm:text-base font-semibold transition-all transform hover:-translate-y-1 shadow-button min-h-[44px] flex items-center justify-center btn-ripple">
                                     View Deals
                                 </a>
@@ -95,9 +95,9 @@ const Home = () => {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                         <div className="absolute bottom-6 left-6 text-white">
                             <h3 className="text-2xl font-bold mb-2">Laptops</h3>
-                            <button onClick={() => setFilter('laptop')} className="text-sm font-medium hover:underline flex items-center">
+                            <Link to="/products" state={{ category: 'laptop' }} className="text-sm font-medium hover:underline flex items-center">
                                 Explore Collection <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
-                            </button>
+                            </Link>
                         </div>
                     </div>
 
@@ -111,9 +111,9 @@ const Home = () => {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                         <div className="absolute bottom-6 left-6 text-white">
                             <h3 className="text-2xl font-bold mb-2">Mobiles</h3>
-                            <button onClick={() => setFilter('mobile')} className="text-sm font-medium hover:underline flex items-center">
+                            <Link to="/products" state={{ category: 'mobile' }} className="text-sm font-medium hover:underline flex items-center">
                                 Shop Smartphones <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
-                            </button>
+                            </Link>
                         </div>
                     </div>
 
@@ -127,9 +127,9 @@ const Home = () => {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                         <div className="absolute bottom-6 left-6 text-white">
                             <h3 className="text-2xl font-bold mb-2">Gaming</h3>
-                            <button onClick={() => setFilter('gaming')} className="text-sm font-medium hover:underline flex items-center">
+                            <Link to="/products" state={{ category: 'gaming' }} className="text-sm font-medium hover:underline flex items-center">
                                 Level Up <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
