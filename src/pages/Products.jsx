@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
+import SEO from '../components/SEO';
 import { products } from '../data/products';
 
 const Products = () => {
     const [filter, setFilter] = useState('all');
+    const [priceRange, setPriceRange] = useState({ min: 0, max: 200000 });
     const [filteredProducts, setFilteredProducts] = useState(products);
     const location = useLocation();
     const searchQuery = location.state?.searchQuery || '';
@@ -25,11 +27,18 @@ const Products = () => {
             result = result.filter(p => p.category === filter || (p.category && p.category.includes(filter)));
         }
 
+        // Apply price filter
+        result = result.filter(p => p.price >= priceRange.min && p.price <= priceRange.max);
+
         setFilteredProducts(result);
-    }, [filter, searchQuery]);
+    }, [filter, searchQuery, priceRange]);
 
     return (
         <div className="bg-gradient-to-br from-gray-50 to-gray-100 py-10 sm:py-12 md:py-16">
+            <SEO
+                title={searchQuery ? `Search Results for "${searchQuery}" - Catchy Electronics` : "Shop All Products - Catchy Electronics"}
+                description="Explore our extensive collection of premium electronics including laptops, smartphones, monitors, and gaming accessories."
+            />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Page Title */}
                 <h1 className="text-3xl sm:text-4xl md:text-4xl font-bold text-center mb-8 sm:mb-10 md:mb-12 animate-fadeIn">
@@ -50,6 +59,38 @@ const Products = () => {
                             {cat.charAt(0).toUpperCase() + cat.slice(1)}
                         </button>
                     ))}
+                </div>
+
+                {/* Price Filter */}
+                <div className="flex justify-center mb-8 px-4 animate-fadeIn">
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row items-center gap-4 w-full max-w-2xl">
+                        <span className="font-semibold text-gray-700">Price Range:</span>
+                        <div className="flex items-center gap-3 w-full">
+                            <div className="relative flex-1">
+                                <span className="absolute left-3 top-2.5 text-gray-500 text-sm">₹</span>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    value={priceRange.min}
+                                    onChange={(e) => setPriceRange({ ...priceRange, min: parseInt(e.target.value) || 0 })}
+                                    className="w-full pl-6 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent"
+                                    placeholder="Min"
+                                />
+                            </div>
+                            <span className="text-gray-400">-</span>
+                            <div className="relative flex-1">
+                                <span className="absolute left-3 top-2.5 text-gray-500 text-sm">₹</span>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    value={priceRange.max}
+                                    onChange={(e) => setPriceRange({ ...priceRange, max: parseInt(e.target.value) || 0 })}
+                                    className="w-full pl-6 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent"
+                                    placeholder="Max"
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Search Results Message */}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Trash2, ArrowLeft, Loader2 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import SEO from '../components/SEO';
 
 const Cart = () => {
     const { cart, removeFromCart, updateQuantity, getCartTotal } = useCart();
@@ -35,6 +36,7 @@ const Cart = () => {
 
     return (
         <>
+            <SEO title="Shopping Cart - Catchy Electronics" description="Review your selected items and proceed to secure checkout." />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <h1 className="text-3xl font-bold mb-8">Shopping Cart</h1>
 
@@ -166,68 +168,16 @@ const Cart = () => {
                                 </div>
                             </div>
 
-                            <button
-                                onClick={handleCheckout}
-                                disabled={isProcessing}
-                                className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-red-600 transition shadow-lg flex items-center justify-center disabled:opacity-70"
+                            <Link
+                                to="/checkout"
+                                className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-red-600 transition shadow-lg flex items-center justify-center text-center block"
                             >
-                                {isProcessing ? (
-                                    <>
-                                        <Loader2 className="animate-spin mr-2" size={20} />
-                                        Processing...
-                                    </>
-                                ) : (
-                                    'Proceed to Checkout'
-                                )}
-                            </button>
+                                Proceed to Checkout
+                            </Link>
                         </div>
                     </div>
                 </div>
             </div>
-
-            {/* Coming Soon Modal */}
-            {showModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-lg p-8 max-w-md w-full shadow-2xl animate-bounce-in">
-                        <div className="text-center">
-                            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-900 mb-2">Coming Soon!</h3>
-                            <p className="text-gray-600 mb-6">
-                                The checkout feature will be added soon. Thank you for your patience!
-                            </p>
-                            <button
-                                onClick={closeModal}
-                                className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-600 transition"
-                            >
-                                Got it
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            <style jsx>{`
-                @keyframes bounce-in {
-                    0% {
-                        transform: scale(0.8);
-                        opacity: 0;
-                    }
-                    50% {
-                        transform: scale(1.05);
-                    }
-                    100% {
-                        transform: scale(1);
-                        opacity: 1;
-                    }
-                }
-                .animate-bounce-in {
-                    animation: bounce-in 0.5s ease-out;
-                }
-            `}</style>
         </>
     );
 };

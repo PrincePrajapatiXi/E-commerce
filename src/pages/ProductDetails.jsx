@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Star, ShoppingCart, Check } from 'lucide-react';
+import { Star, ShoppingCart, Check, Truck, RotateCcw, ShieldCheck, Award } from 'lucide-react';
 import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
 import ProductCard from '../components/ProductCard';
+import SEO from '../components/SEO';
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -58,6 +59,10 @@ const ProductDetails = () => {
 
     return (
         <div className="bg-gray-50">
+            <SEO
+                title={`${product.name} - Buy at Best Price`}
+                description={product.description}
+            />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 bg-white rounded-2xl p-6 sm:p-8 shadow-lg mb-12">
                     {/* Image Gallery */}
@@ -101,6 +106,38 @@ const ProductDetails = () => {
                         </div>
 
                         <p className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-6">₹ {product.price.toLocaleString()}</p>
+
+                        {/* PDP Trust Badges */}
+                        <div className="grid grid-cols-2 gap-4 mb-8">
+                            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                                <Truck className="text-primary w-6 h-6 flex-shrink-0" />
+                                <div>
+                                    <p className="font-semibold text-sm text-gray-900">Free Delivery</p>
+                                    <p className="text-xs text-gray-500">2-4 Business Days</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                                <RotateCcw className="text-primary w-6 h-6 flex-shrink-0" />
+                                <div>
+                                    <p className="font-semibold text-sm text-gray-900">7 Days Return</p>
+                                    <p className="text-xs text-gray-500">Easy Return Policy</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                                <ShieldCheck className="text-primary w-6 h-6 flex-shrink-0" />
+                                <div>
+                                    <p className="font-semibold text-sm text-gray-900">Genuine Product</p>
+                                    <p className="text-xs text-gray-500">100% Authentic</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                                <Award className="text-primary w-6 h-6 flex-shrink-0" />
+                                <div>
+                                    <p className="font-semibold text-sm text-gray-900">1 Year Warranty</p>
+                                    <p className="text-xs text-gray-500">Brand Warranty</p>
+                                </div>
+                            </div>
+                        </div>
 
                         <div className="mb-8">
                             <h3 className="text-lg font-semibold mb-2">Product Details</h3>

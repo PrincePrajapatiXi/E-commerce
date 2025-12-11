@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
+import ProductSection from '../components/ProductSection';
 import { products } from '../data/products';
 import TrustBadges from '../components/TrustBadges';
+import SEO from '../components/SEO';
+import { TrendingUp, Zap, Award, Sparkles, ShoppingBag, Clock } from 'lucide-react';
 
 const Home = () => {
     const [filter, setFilter] = useState('all');
@@ -29,11 +32,20 @@ const Home = () => {
         setFilteredProducts(result);
     }, [filter, searchQuery]);
 
-    const featuredProducts = products.slice(0, 3); // Just taking first 3 as featured for demo
-    const latestProducts = products.slice(6, 10); // Taking some others as latest
+    // Product sections data
+    const bestSellers = products.filter(p => p.rating === 5 && p.id !== 11);
+    const trendingNow = products.filter(p => p.category.includes('gaming') || p.category.includes('mobile'));
+    const dealsOfTheDay = products.filter(p => p.oldPrice || p.price < 50000);
+    const topRated = [...products].sort((a, b) => b.rating - a.rating).filter(p => p.id !== 11);
+    const newArrivals = products.slice(-4).reverse();
+    const laptops = products.filter(p => p.category.includes('laptop'));
 
     return (
         <div className="space-y-8 sm:space-y-12 md:space-y-16 pb-8 sm:pb-12 md:pb-16">
+            <SEO
+                title="Catchy Electronics - Premium Gadgets & Accessories"
+                description="Discover premium electronics, laptops, mobiles, and gaming gear at Catchy. Shop now for exclusive deals and fast delivery."
+            />
             {/* Hero Section */}
             <div className="bg-gradient-hero py-10 md:py-16 lg:py-24 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent"></div>
@@ -66,6 +78,62 @@ const Home = () => {
 
             {/* Trust Badges */}
             <TrustBadges />
+
+            {/* Featured Categories - 3 distinct cards as per spec */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12 animate-fadeIn">
+                    Shop by Category
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                    {/* Card 1: Laptops */}
+                    <div className="group relative h-64 sm:h-80 rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-transform hover:-translate-y-2">
+                        <img
+                            src="/images/MacBook Air M4 1.png"
+                            alt="Laptops"
+                            className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                        <div className="absolute bottom-6 left-6 text-white">
+                            <h3 className="text-2xl font-bold mb-2">Laptops</h3>
+                            <button onClick={() => setFilter('laptop')} className="text-sm font-medium hover:underline flex items-center">
+                                Explore Collection <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Card 2: Mobiles */}
+                    <div className="group relative h-64 sm:h-80 rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-transform hover:-translate-y-2">
+                        <img
+                            src="/images/Iphone 16 pro max.png"
+                            alt="Mobiles"
+                            className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                        <div className="absolute bottom-6 left-6 text-white">
+                            <h3 className="text-2xl font-bold mb-2">Mobiles</h3>
+                            <button onClick={() => setFilter('mobile')} className="text-sm font-medium hover:underline flex items-center">
+                                Shop Smartphones <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Card 3: Gaming */}
+                    <div className="group relative h-64 sm:h-80 rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-transform hover:-translate-y-2">
+                        <img
+                            src="/images/Gaming controller.png"
+                            alt="Gaming"
+                            className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                        <div className="absolute bottom-6 left-6 text-white">
+                            <h3 className="text-2xl font-bold mb-2">Gaming</h3>
+                            <button onClick={() => setFilter('gaming')} className="text-sm font-medium hover:underline flex items-center">
+                                Level Up <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             {/* Featured Products */}
             <div id="featured" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -144,6 +212,78 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* Divider */}
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent max-w-7xl mx-auto"></div>
+
+            {/* Best Sellers Section */}
+            <ProductSection
+                title="🏆 Best Sellers"
+                products={bestSellers}
+                viewAllLink="/products"
+                icon="🏆"
+                gradient="from-yellow-500 to-orange-500"
+            />
+
+            {/* Divider */}
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent max-w-7xl mx-auto"></div>
+
+            {/* Trending Now Section */}
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 py-10 sm:py-12">
+                <ProductSection
+                    title="🔥 Trending Now"
+                    products={trendingNow}
+                    viewAllLink="/products"
+                    icon="🔥"
+                    gradient="from-blue-600 to-purple-600"
+                />
+            </div>
+
+            {/* Deals of the Day Section */}
+            <ProductSection
+                title="⚡ Deals of the Day"
+                products={dealsOfTheDay}
+                viewAllLink="/products"
+                icon="⚡"
+                gradient="from-green-500 to-teal-500"
+            />
+
+            {/* Divider */}
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent max-w-7xl mx-auto"></div>
+
+            {/* Top Rated Section */}
+            <div className="bg-gradient-to-br from-purple-50 to-pink-50 py-10 sm:py-12">
+                <ProductSection
+                    title="⭐ Top Rated Products"
+                    products={topRated}
+                    viewAllLink="/products"
+                    icon="⭐"
+                    gradient="from-purple-600 to-pink-600"
+                />
+            </div>
+
+            {/* New Arrivals Section */}
+            <ProductSection
+                title="✨ New Arrivals"
+                products={newArrivals}
+                viewAllLink="/products"
+                icon="✨"
+                gradient="from-indigo-500 to-cyan-500"
+            />
+
+            {/* Divider */}
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent max-w-7xl mx-auto"></div>
+
+            {/* Shop by Category - Laptops */}
+            <div className="bg-gradient-to-br from-gray-50 to-slate-50 py-10 sm:py-12">
+                <ProductSection
+                    title="💻 Laptops & Computers"
+                    products={laptops}
+                    viewAllLink="/products"
+                    icon="💻"
+                    gradient="from-slate-600 to-gray-600"
+                />
             </div>
         </div>
     );
