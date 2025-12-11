@@ -97,44 +97,44 @@ const Cart = () => {
                                     <div className="md:hidden">
                                         {/* Product Info */}
                                         <div className="flex items-start space-x-3 mb-4">
-                                            <img src={item.images[0]} alt={item.name} loading="lazy" className="w-24 h-24 object-contain bg-gray-50 rounded flex-shrink-0" />
+                                            <img src={item.images[0]} alt={item.name} loading="lazy" className="w-20 h-20 sm:w-24 sm:h-24 object-contain bg-gray-50 rounded flex-shrink-0" />
                                             <div className="flex-1 min-w-0">
-                                                <h3 className="font-semibold text-gray-800 mb-2">{item.name}</h3>
-                                                <div className="text-lg font-bold text-primary">₹ {item.price.toLocaleString()}</div>
+                                                <h3 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">{item.name}</h3>
+                                                <div className="text-base sm:text-lg font-bold text-primary">₹ {item.price.toLocaleString()}</div>
                                             </div>
                                         </div>
 
                                         {/* Quantity and Subtotal */}
                                         <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg mb-3">
                                             <div className="flex items-center space-x-3">
-                                                <span className="text-sm font-medium text-gray-600">Quantity:</span>
+                                                <span className="text-xs sm:text-sm font-medium text-gray-600">Qty:</span>
                                                 <div className="flex items-center border rounded bg-white">
                                                     <button
                                                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                        className="px-3 py-1 hover:bg-gray-100 text-lg"
+                                                        className="px-3 py-2 hover:bg-gray-100 text-lg active:bg-gray-200 transition-colors"
                                                     >-</button>
                                                     <input
                                                         type="number"
                                                         value={item.quantity}
                                                         onChange={(e) => updateQuantity(item.id, parseInt(e.target.value) || 1)}
-                                                        className="w-12 text-center border-none focus:ring-0 p-1 font-semibold"
+                                                        className="w-10 sm:w-12 text-center border-none focus:ring-0 p-1 font-semibold text-sm sm:text-base"
                                                     />
                                                     <button
                                                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                        className="px-3 py-1 hover:bg-gray-100 text-lg"
+                                                        className="px-3 py-2 hover:bg-gray-100 text-lg active:bg-gray-200 transition-colors"
                                                     >+</button>
                                                 </div>
                                             </div>
                                             <div className="text-right">
-                                                <div className="text-xs text-gray-500 mb-1">Subtotal</div>
-                                                <div className="text-lg font-bold text-gray-900">₹ {(item.price * item.quantity).toLocaleString()}</div>
+                                                <div className="text-[10px] sm:text-xs text-gray-500 mb-1">Subtotal</div>
+                                                <div className="text-base sm:text-lg font-bold text-gray-900">₹ {(item.price * item.quantity).toLocaleString()}</div>
                                             </div>
                                         </div>
 
                                         {/* Remove Button */}
                                         <button
                                             onClick={() => removeFromCart(item.id)}
-                                            className="text-red-500 text-sm hover:underline flex items-center justify-center w-full py-2"
+                                            className="text-red-500 text-sm hover:underline flex items-center justify-center w-full py-3 active:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
                                         >
                                             <Trash2 size={16} className="mr-1" /> Remove Item
                                         </button>

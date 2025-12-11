@@ -75,7 +75,7 @@ const ProductCard = ({ product }) => {
 
             <div className="flex-grow">
                 <Link to={`/product/${product.id}`}>
-                    <h4 className="text-sm sm:text-base lg:text-lg font-semibold text-gray-800 mb-2 hover:text-primary transition-colors line-clamp-2 min-h-[2.5rem] sm:min-h-[3rem]">
+                    <h4 className="text-sm sm:text-base lg:text-lg font-semibold text-gray-800 mb-2 hover:text-primary transition-colors line-clamp-2 min-h-[40px] sm:min-h-[3rem]">
                         {product.name}
                     </h4>
                 </Link>
@@ -85,13 +85,13 @@ const ProductCard = ({ product }) => {
                         <Star
                             key={i}
                             size={14}
-                            className={`sm:w-4 sm:h-4 transition-all duration-200 ${i < product.rating
+                            className={`w-3 h-3 sm:w-4 sm:h-4 transition-all duration-200 ${i < product.rating
                                 ? 'text-yellow-400 fill-current'
                                 : 'text-gray-300'
                                 }`}
                         />
                     ))}
-                    <span className="text-xs text-gray-500 ml-1">({product.rating})</span>
+                    <span className="text-[10px] sm:text-xs text-gray-500 ml-1">({product.rating})</span>
                 </div>
 
                 <p className="text-xs sm:text-sm text-gray-600 mb-3 line-clamp-2 hidden sm:block">
@@ -99,13 +99,13 @@ const ProductCard = ({ product }) => {
                 </p>
             </div>
 
-            <div className="mt-auto pt-3 border-t border-gray-100 space-y-3">
+            <div className="mt-auto pt-3 border-t border-gray-100 space-y-2 sm:space-y-3">
                 <div className="flex items-center justify-between">
-                    <p className="text-base sm:text-lg lg:text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+                    <p className="text-sm sm:text-lg lg:text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
                         ₹ {product.price.toLocaleString()}
                     </p>
                     {product.oldPrice && (
-                        <p className="text-xs sm:text-sm text-gray-400 line-through">
+                        <p className="text-[10px] sm:text-sm text-gray-400 line-through">
                             ₹ {product.oldPrice.toLocaleString()}
                         </p>
                     )}
@@ -114,7 +114,7 @@ const ProductCard = ({ product }) => {
                 {/* View Details Button */}
                 <Link
                     to={`/product/${product.id}`}
-                    className="block w-full bg-gradient-primary hover:shadow-glow text-white py-2 sm:py-2.5 px-4 rounded-lg font-semibold transition-all duration-200 transform hover:-translate-y-0.5 shadow-button hover:shadow-button-hover btn-ripple text-xs sm:text-sm min-h-[44px] flex items-center justify-center gap-2"
+                    className="block w-full bg-gradient-primary hover:shadow-glow text-white py-2 sm:py-2.5 px-3 sm:px-4 rounded-lg font-semibold transition-all duration-200 transform hover:-translate-y-0.5 shadow-button hover:shadow-button-hover btn-ripple text-xs sm:text-sm min-h-[36px] sm:min-h-[44px] flex items-center justify-center gap-2"
                 >
                     <ShoppingCart size={16} />
                     <span>View Details</span>

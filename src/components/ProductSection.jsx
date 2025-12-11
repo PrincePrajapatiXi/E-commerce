@@ -28,13 +28,15 @@ const ProductSection = ({ title, products, viewAllLink, icon, gradient = "from-p
             </div>
 
             {/* Product Grid - Horizontal Scroll on Mobile, Grid on Desktop */}
-            <div className="overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
-                <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 min-w-max sm:min-w-0">
-                    {products.slice(0, 4).map(product => (
-                        <div key={product.id} className="w-[280px] sm:w-auto flex-shrink-0">
-                            <ProductCard product={product} />
-                        </div>
-                    ))}
+            <div className="relative group">
+                <div className="overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 pb-4 sm:pb-0">
+                    <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 min-w-max sm:min-w-0">
+                        {products.slice(0, 4).map(product => (
+                            <div key={product.id} className="w-[280px] sm:w-auto flex-shrink-0">
+                                <ProductCard product={product} />
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

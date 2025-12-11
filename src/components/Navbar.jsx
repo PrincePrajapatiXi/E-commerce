@@ -86,36 +86,38 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Menu */}
-            {isMenuOpen && (
-                <div className="md:hidden bg-white/95 backdrop-blur-glass border-t border-gray-200 shadow-lg animate-slideDown">
-                    <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                        {/* Mobile Search */}
-                        <div className="flex items-center bg-gray-100 rounded-full px-3 py-2 mb-3 mx-2">
-                            <input
-                                type="text"
-                                placeholder="Search products..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                onKeyPress={handleSearchKeyPress}
-                                className="bg-transparent border-none focus:outline-none text-sm w-full"
-                            />
-                            <button
-                                onClick={handleSearch}
-                                className="text-gray-500 hover:text-primary transition-colors"
-                            >
-                                <Search size={18} />
-                            </button>
-                        </div>
+            {
+                isMenuOpen && (
+                    <div className="md:hidden bg-white/95 backdrop-blur-glass border-t border-gray-200 shadow-lg animate-slideDown absolute top-16 left-0 right-0 h-screen z-50 overflow-y-auto pb-20">
+                        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                            {/* Mobile Search */}
+                            <div className="flex items-center bg-gray-100 rounded-full px-3 py-2 mb-3 mx-2">
+                                <input
+                                    type="text"
+                                    placeholder="Search products..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    onKeyPress={handleSearchKeyPress}
+                                    className="bg-transparent border-none focus:outline-none text-sm w-full"
+                                />
+                                <button
+                                    onClick={handleSearch}
+                                    className="text-gray-500 hover:text-primary transition-colors"
+                                >
+                                    <Search size={18} />
+                                </button>
+                            </div>
 
-                        <Link to="/" className="block text-gray-700 hover:text-primary hover:bg-gray-50 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Home</Link>
-                        <Link to="/products" className="block text-gray-700 hover:text-primary hover:bg-gray-50 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Products</Link>
-                        <Link to="/about" className="block text-gray-700 hover:text-primary hover:bg-gray-50 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>About</Link>
-                        <Link to="/contact" className="block text-gray-700 hover:text-primary hover:bg-gray-50 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Contact</Link>
-                        <Link to="/account" className="block text-gray-700 hover:text-primary hover:bg-gray-50 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Account</Link>
+                            <Link to="/" className="block text-gray-700 hover:text-primary hover:bg-gray-50 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Home</Link>
+                            <Link to="/products" className="block text-gray-700 hover:text-primary hover:bg-gray-50 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Products</Link>
+                            <Link to="/about" className="block text-gray-700 hover:text-primary hover:bg-gray-50 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>About</Link>
+                            <Link to="/contact" className="block text-gray-700 hover:text-primary hover:bg-gray-50 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Contact</Link>
+                            <Link to="/account" className="block text-gray-700 hover:text-primary hover:bg-gray-50 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Account</Link>
+                        </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 };
 
