@@ -5,6 +5,10 @@ import ProductSection from '../components/ProductSection';
 import { products } from '../data/products';
 import TrustBadges from '../components/TrustBadges';
 import SEO from '../components/SEO';
+import Newsletter from '../components/Newsletter';
+import RecentlyViewed from '../components/RecentlyViewed';
+import StatsCounter from '../components/StatsCounter';
+import FeaturedProducts from '../components/FeaturedProducts';
 import { TrendingUp, Zap, Award, Sparkles, ShoppingBag, Clock } from 'lucide-react';
 
 const Home = () => {
@@ -47,16 +51,21 @@ const Home = () => {
                 description="Discover premium electronics, laptops, mobiles, and gaming gear at Catchy. Shop now for exclusive deals and fast delivery."
             />
             {/* Hero Section */}
-            <div className="bg-gradient-hero py-10 md:py-16 lg:py-24 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent"></div>
+            <div className="bg-gradient-hero dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-10 md:py-16 lg:py-24 relative overflow-hidden">
+                {/* Animated Background Orbs */}
+                <div className="absolute top-20 left-10 w-72 h-72 bg-primary/20 dark:bg-primary/10 rounded-full blur-3xl animate-pulse-slow" />
+                <div className="absolute bottom-10 right-20 w-96 h-96 bg-purple-500/20 dark:bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '0.5s' }} />
+
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent dark:from-primary/10"></div>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div className="flex flex-col md:flex-row items-center gap-8">
                         <div className="md:w-1/2 text-center md:text-left animate-fadeIn">
-                            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-5 md:mb-6 leading-tight">
+                            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-5 md:mb-6 leading-tight">
                                 <span className="text-transparent bg-clip-text bg-gradient-primary">Premium Electronics</span><br />
-                                For Every Lifestyle
+                                <span className="dark:text-gray-100">For Every Lifestyle</span>
                             </h1>
-                            <p className="text-sm sm:text-base md:text-lg text-gray-600 mb-5 sm:mb-6 md:mb-8 max-w-lg mx-auto md:mx-0">
+                            <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 mb-5 sm:mb-6 md:mb-8 max-w-lg mx-auto md:mx-0">
                                 Discover cutting-edge technology that transforms your daily experience. From powerful laptops to sleek smartphones.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
@@ -64,7 +73,7 @@ const Home = () => {
                                     <span>Shop Now</span>
                                     <span className="transform group-hover:translate-x-1 transition-transform">→</span>
                                 </Link>
-                                <a href="#special-offers" className="bg-white text-gray-800 border-2 border-gray-300 hover:border-primary hover:bg-primary hover:text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full text-sm sm:text-base font-semibold transition-all transform hover:-translate-y-1 shadow-button min-h-[44px] flex items-center justify-center btn-ripple">
+                                <a href="#special-offers" className="bg-white dark:bg-gray-800 text-gray-800 dark:text-white border-2 border-gray-300 dark:border-gray-600 hover:border-primary hover:bg-primary hover:text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full text-sm sm:text-base font-semibold transition-all transform hover:-translate-y-1 shadow-button min-h-[44px] flex items-center justify-center btn-ripple">
                                     View Deals
                                 </a>
                             </div>
@@ -81,7 +90,8 @@ const Home = () => {
 
             {/* Featured Categories - 3 distinct cards as per spec */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12 animate-fadeIn">
+                {/* Shop by Category */}
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12 animate-fadeIn text-gray-900 dark:text-white">
                     Shop by Category
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
@@ -276,7 +286,7 @@ const Home = () => {
             <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent max-w-7xl mx-auto"></div>
 
             {/* Shop by Category - Laptops */}
-            <div className="bg-gradient-to-br from-gray-50 to-slate-50 py-10 sm:py-12">
+            <div className="bg-gradient-to-br from-gray-50 to-slate-50 dark:from-gray-800 dark:to-gray-900 py-10 sm:py-12">
                 <ProductSection
                     title="💻 Laptops & Computers"
                     products={laptops}
@@ -285,6 +295,18 @@ const Home = () => {
                     gradient="from-slate-600 to-gray-600"
                 />
             </div>
+
+            {/* Featured Products */}
+            <FeaturedProducts products={products} title="🌟 Top Picks For You" />
+
+            {/* Stats Counter */}
+            <StatsCounter />
+
+            {/* Recently Viewed */}
+            <RecentlyViewed />
+
+            {/* Newsletter */}
+            <Newsletter />
         </div>
     );
 };
