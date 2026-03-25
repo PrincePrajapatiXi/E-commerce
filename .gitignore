@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+test-key.js
+valid-key.txt
 
 # Editor directories and files
 .vscode/*
