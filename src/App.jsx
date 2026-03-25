@@ -13,56 +13,79 @@ import Account from './pages/Account';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import ReturnPolicy from './pages/ReturnPolicy';
 import RefundPolicy from './pages/RefundPolicy';
-import PlaceholderPage from './pages/PlaceholderPage';
+import TermsAndConditions from './pages/TermsAndConditions';
 import Checkout from './pages/Checkout';
+import VerifyEmail from './pages/VerifyEmail';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider } from './context/ToastContext';
 import BackToTop from './components/BackToTop';
 import Toast from './components/Toast';
-import FloatingWhatsApp from './components/FloatingWhatsApp';
+
 import PromoBanner from './components/PromoBanner';
+// New Mobile Components
+import BottomNav from './components/BottomNav';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
+import OfflineIndicator from './components/OfflineIndicator';
+import useGestureNavigation from './hooks/useGestureNavigation';
+
+// Gesture navigation wrapper component
+const GestureNavigationWrapper = ({ children }) => {
+  useGestureNavigation({ enabled: true });
+  return children;
+};
 
 function App() {
   return (
-    <ThemeProvider>
-      <ToastProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <ToastProvider>
         <CartProvider>
           <WishlistProvider>
             <Router>
-              <ScrollToTop />
-              <PromoBanner />
-              <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-                <Navbar />
-                <main className="flex-grow">
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/product/:id" element={<ProductDetails />} />
-                    <Route path="/cart" element={<Cart />} />
-                    <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/account" element={<Account />} />
-                    <Route path="/privacy" element={<PrivacyPolicy />} />
-                    <Route path="/terms" element={<PlaceholderPage title="Terms of Service" />} />
-                    <Route path="/returns" element={<ReturnPolicy />} />
-                    <Route path="/refund" element={<RefundPolicy />} />
-                  </Routes>
-                </main>
-                <Footer />
-                <BackToTop />
-                <FloatingWhatsApp />
-              </div>
-              <Toast />
+              <GestureNavigationWrapper>
+                <ScrollToTop />
+                <PromoBanner />
+                <OfflineIndicator />
+                <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300 pb-16 md:pb-0">
+                  <Navbar />
+                  <main className="flex-grow">
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/product/:id" element={<ProductDetails />} />
+                      <Route path="/cart" element={<Cart />} />
+                      <Route path="/checkout" element={<Checkout />} />
+                      <Route path="/products" element={<Products />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="/contact" element={<Contact />} />
+                      <Route path="/verify-email" element={<VerifyEmail />} />
+                      <Route path="/account" element={<Account />} />
+                      <Route path="/account/profile" element={<ProtectedRoute><Account /></ProtectedRoute>} />
+                      <Route path="/dashboard" element={<ProtectedRoute><Account /></ProtectedRoute>} />
+                      <Route path="/privacy" element={<PrivacyPolicy />} />
+                      <Route path="/terms" element={<TermsAndConditions />} />
+                      <Route path="/returns" element={<ReturnPolicy />} />
+                      <Route path="/refund" element={<RefundPolicy />} />
+                    </Routes>
+                  </main>
+                  <Footer />
+                  <BackToTop />
+
+                  <BottomNav />
+                  <PWAInstallPrompt />
+                </div>
+                <Toast />
+              </GestureNavigationWrapper>
             </Router>
           </WishlistProvider>
         </CartProvider>
-      </ToastProvider>
-    </ThemeProvider>
+        </ToastProvider>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 
 export default App;
-

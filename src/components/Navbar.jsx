@@ -3,12 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Menu, X, Search, Sun, Moon } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const { getCartCount } = useCart();
     const { isDark, toggleTheme } = useTheme();
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
 
     const handleSearch = (e) => {
@@ -43,7 +45,11 @@ const Navbar = () => {
                         <Link to="/products" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium transform hover:scale-110 transition-all duration-200">Products</Link>
                         <Link to="/about" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium transform hover:scale-110 transition-all duration-200">About</Link>
                         <Link to="/contact" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium transform hover:scale-110 transition-all duration-200">Contact</Link>
-                        <Link to="/account" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium transform hover:scale-110 transition-all duration-200">Account</Link>
+                        
+                            {!user && (
+    <Link to="/account" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium transform hover:scale-110 transition-all duration-200">Account</Link>
+)}
+                        
                     </nav>
 
                     {/* Search, Theme Toggle, and Cart */}
@@ -82,6 +88,20 @@ const Navbar = () => {
                                 </span>
                             )}
                         </Link>
+
+                        {user && (
+    <Link to="/account" className="relative flex items-center transform hover:scale-110 transition-all duration-200 focus:outline-none">
+        <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-primary shadow-sm hover:shadow-md transition-shadow">
+            {user.photoURL ? (
+                <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
+            ) : (
+                <div className="w-full h-full bg-gradient-primary flex items-center justify-center text-white font-bold text-sm uppercase">
+                    {user.displayName ? user.displayName.charAt(0) : (user.email ? user.email.charAt(0) : 'U')}
+                </div>
+            )}
+        </div>
+    </Link>
+)}
 
                         {/* Mobile menu button */}
                         <div className="md:hidden">
@@ -123,7 +143,29 @@ const Navbar = () => {
                             <Link to="/products" className="block text-gray-700 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Products</Link>
                             <Link to="/about" className="block text-gray-700 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>About</Link>
                             <Link to="/contact" className="block text-gray-700 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Contact</Link>
-                            <Link to="/account" className="block text-gray-700 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Account</Link>
+                            
+                            {user ? (
+                                <Link to="/account" className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 block" onClick={() => setIsMenuOpen(false)}>
+                                    <div className="flex items-center space-x-3 px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                                        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary shadow-sm">
+                                            {user.photoURL ? (
+                                                <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="w-full h-full bg-gradient-primary flex items-center justify-center text-white font-bold text-sm uppercase">
+                                                    {user.displayName ? user.displayName.charAt(0) : (user.email ? user.email.charAt(0) : 'U')}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <div className="text-sm font-medium text-gray-900 dark:text-white">{user.displayName || 'User'}</div>
+                                            <div className="text-xs text-gray-500 dark:text-gray-400 truncate w-40">{user.email}</div>
+                                        </div>
+                                    </div>
+                                    <div className="px-3 py-3 block text-center mt-2 text-primary hover:text-primary/80 font-medium">View Profile Dashboard</div>
+                                </Link>
+                            ) : (
+                                <Link to="/account" className="block text-gray-700 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Account</Link>
+                            )}
 
                             {/* Mobile Theme Toggle */}
                             <button

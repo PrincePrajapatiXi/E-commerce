@@ -1,22 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Star, ShoppingCart, Check, Truck, RotateCcw, ShieldCheck, Award } from 'lucide-react';
+import { Star, ShoppingCart, Check, Truck, RotateCcw, ShieldCheck, Award, ChevronLeft, ChevronRight } from 'lucide-react';
 import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import ProductCard from '../components/ProductCard';
 import SEO from '../components/SEO';
 import { addToRecentlyViewed } from '../components/RecentlyViewed';
+import useSwipeGesture from '../hooks/useSwipeGesture';
+import useHaptic from '../hooks/useHaptic';
 
 const ProductDetails = () => {
     const { id } = useParams();
     const product = products.find(p => p.id === parseInt(id));
     const { addToCart } = useCart();
     const { success } = useToast();
+    const haptic = useHaptic();
 
     const [quantity, setQuantity] = useState(1);
     const [selectedImage, setSelectedImage] = useState(0);
     const [added, setAdded] = useState(false);
+
+    // Swipe gesture for image gallery
+    const handleSwipeLeft = () => {
+        if (product && selectedImage < product.images.length - 1) {
+            setSelectedImage(prev => prev + 1);
+            haptic.light();
+        }
+    };
+
+    const handleSwipeRight = () => {
+        if (selectedImage > 0) {
+            setSelectedImage(prev => prev - 1);
+            haptic.light();
+        }
+    };
+
+    const { bind: swipeBind, swipeOffset } = useSwipeGesture({
+        onSwipeLeft: handleSwipeLeft,
+        onSwipeRight: handleSwipeRight,
+        threshold: 50,
+    });
 
     // Track recently viewed products - must be before early return
     useEffect(() => {
@@ -24,6 +48,11 @@ const ProductDetails = () => {
             addToRecentlyViewed(product);
         }
     }, [product]);
+
+    // Reset selected image when product changes
+    useEffect(() => {
+        setSelectedImage(0);
+    }, [id]);
 
     if (!product) {
         return (
@@ -37,6 +66,7 @@ const ProductDetails = () => {
     const handleAddToCart = () => {
         addToCart(product, quantity);
         success(`Added ${quantity} ${product.name} to cart!`);
+        haptic.success();
         setAdded(true);
         setTimeout(() => setAdded(false), 2000);
     };
@@ -78,22 +108,66 @@ const ProductDetails = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-lg dark:shadow-gray-900/50 mb-12">
                     {/* Image Gallery */}
                     <div className="space-y-3 sm:space-y-4">
-                        <div className="bg-gray-50 dark:bg-gray-700 rounded-xl overflow-hidden border-2 border-gray-200 dark:border-gray-600 shadow-card hover:shadow-card-hover transition-all">
+                        {/* Main Image with Swipe Support */}
+                        <div
+                            className="bg-white rounded-xl overflow-hidden border-2 border-gray-200 dark:border-gray-600 shadow-card hover:shadow-card-hover transition-all relative touch-pan-y p-4"
+                            {...swipeBind}
+                        >
                             <img
                                 src={product.images[selectedImage]}
                                 alt={product.name}
                                 loading="lazy"
-                                className="w-full h-64 sm:h-80 md:h-96 object-contain transition-transform duration-500"
+                                className="w-full h-64 sm:h-80 md:h-96 object-contain transition-transform duration-300"
+                                style={{
+                                    transform: `translateX(${swipeOffset * 0.3}px)`,
+                                }}
                             />
+
+                            {/* Mobile Navigation Arrows */}
+                            <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-2 pointer-events-none md:hidden">
+                                {selectedImage > 0 && (
+                                    <button
+                                        onClick={() => { setSelectedImage(prev => prev - 1); haptic.light(); }}
+                                        className="pointer-events-auto p-2 bg-white/80 dark:bg-gray-800/80 rounded-full shadow-lg backdrop-blur-sm active:scale-95 transition-transform"
+                                    >
+                                        <ChevronLeft size={20} className="text-gray-700 dark:text-gray-300" />
+                                    </button>
+                                )}
+                                <div></div>
+                                {selectedImage < product.images.length - 1 && (
+                                    <button
+                                        onClick={() => { setSelectedImage(prev => prev + 1); haptic.light(); }}
+                                        className="pointer-events-auto p-2 bg-white/80 dark:bg-gray-800/80 rounded-full shadow-lg backdrop-blur-sm active:scale-95 transition-transform"
+                                    >
+                                        <ChevronRight size={20} className="text-gray-700 dark:text-gray-300" />
+                                    </button>
+                                )}
+                            </div>
                         </div>
-                        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-4 gap-2 sm:gap-3">
+
+                        {/* Image Dot Indicators (Mobile) */}
+                        <div className="flex justify-center gap-2 md:hidden">
+                            {product.images.map((_, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => { setSelectedImage(idx); haptic.selection(); }}
+                                    className={`w-2 h-2 rounded-full transition-all ${selectedImage === idx
+                                            ? 'bg-primary w-6'
+                                            : 'bg-gray-300 dark:bg-gray-600'
+                                        }`}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Thumbnail Grid (Desktop) */}
+                        <div className="hidden md:grid grid-cols-4 sm:grid-cols-6 md:grid-cols-4 gap-2 sm:gap-3">
                             {product.images.map((img, idx) => (
                                 <button
                                     key={idx}
                                     onClick={() => setSelectedImage(idx)}
-                                    className={`border-2 rounded-lg overflow-hidden transition-all transform hover:scale-105 min-h-[44px] ${selectedImage === idx ? 'border-primary shadow-md' : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'}`}
+                                    className={`border-2 rounded-lg overflow-hidden transition-all transform hover:scale-105 min-h-[44px] bg-white ${selectedImage === idx ? 'border-primary shadow-md' : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'}`}
                                 >
-                                    <img src={img} alt="" loading="lazy" className="w-full h-16 sm:h-20 object-contain bg-white dark:bg-gray-700" />
+                                    <img src={img} alt="" loading="lazy" className="w-full h-16 sm:h-20 object-contain p-1" />
                                 </button>
                             ))}
                         </div>
@@ -165,8 +239,8 @@ const ProductDetails = () => {
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-8">
                             <div className="flex items-center border-2 border-gray-300 dark:border-gray-600 rounded-lg w-full sm:w-auto">
                                 <button
-                                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                    className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-semibold text-lg min-w-[44px] min-h-[44px] text-gray-900 dark:text-white"
+                                    onClick={() => { setQuantity(Math.max(1, quantity - 1)); haptic.light(); }}
+                                    className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-semibold text-lg min-w-[44px] min-h-[44px] text-gray-900 dark:text-white active:bg-gray-200 dark:active:bg-gray-600"
                                 >
                                     -
                                 </button>
@@ -177,8 +251,8 @@ const ProductDetails = () => {
                                     className="w-16 text-center border-none focus:ring-0 font-semibold bg-transparent text-gray-900 dark:text-white"
                                 />
                                 <button
-                                    onClick={() => setQuantity(quantity + 1)}
-                                    className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-semibold text-lg min-w-[44px] min-h-[44px] text-gray-900 dark:text-white"
+                                    onClick={() => { setQuantity(quantity + 1); haptic.light(); }}
+                                    className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-semibold text-lg min-w-[44px] min-h-[44px] text-gray-900 dark:text-white active:bg-gray-200 dark:active:bg-gray-600"
                                 >
                                     +
                                 </button>
@@ -187,7 +261,7 @@ const ProductDetails = () => {
                             <button
                                 onClick={handleAddToCart}
                                 disabled={added}
-                                className={`flex-1 flex items-center justify-center px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 min-h-[44px] btn-ripple ${added
+                                className={`flex-1 flex items-center justify-center px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 min-h-[44px] btn-ripple active:scale-95 ${added
                                     ? 'bg-green-500 text-white shadow-lg'
                                     : 'bg-gradient-primary hover:shadow-glow text-white'
                                     }`}

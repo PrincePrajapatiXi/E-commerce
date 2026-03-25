@@ -2,24 +2,25 @@ import React from 'react';
 
 const ReturnPolicy = () => {
     return (
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-8">Return Policy</h1>
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 sm:py-12 transition-colors duration-300">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-8">Return Policy</h1>
 
             <div className="prose prose-lg max-w-none">
                 <p className="text-gray-600 mb-6">
-                    Last updated: December 3, 2025
+                    Last updated: March 25, 2026
                 </p>
 
                 <section className="mb-8">
-                    <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Return Eligibility</h2>
-                    <p className="text-gray-700 mb-4">
+                    <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">1. Return Eligibility</h2>
+                    <p className="text-gray-700 dark:text-gray-300 mb-4">
                         We want you to be completely satisfied with your purchase. If you're not happy with your order,
                         you may return eligible items within 30 days of delivery for a full refund or exchange.
                     </p>
                     <p className="text-gray-700 mb-4">
                         To be eligible for a return, items must:
                     </p>
-                    <ul className="list-disc list-inside text-gray-700 space-y-2 mb-4">
+                    <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 mb-4">
                         <li>Be in original, unused condition</li>
                         <li>Include all original packaging, accessories, and documentation</li>
                         <li>Have all tags and labels attached</li>
@@ -121,12 +122,14 @@ const ReturnPolicy = () => {
                     <p className="text-gray-700 mb-4">
                         If you have any questions about our Return Policy, please contact us:
                     </p>
-                    <ul className="list-none text-gray-700 space-y-2">
-                        <li>Email: returns@catchyelectronics.com</li>
-                        <li>Phone: +91 1234567890</li>
-                        <li>Hours: Monday-Friday, 9:00 AM - 6:00 PM IST</li>
+                    <ul className="list-none text-gray-700 dark:text-gray-300 space-y-2">
+                        <li><strong>Business Name:</strong> Catchy Electronics</li>
+                        <li><strong>Email:</strong> <a href="mailto:princeprajapti2589@gmail.com" className="text-primary hover:underline">princeprajapti2589@gmail.com</a></li>
+                        <li><strong>Phone:</strong> +91 79058 41037</li>
+
                     </ul>
                 </section>
+            </div>
             </div>
         </div>
     );

@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { User, Mail, Lock, Eye, EyeOff, Loader2, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { User, Mail, Lock, Eye, EyeOff, Loader2, CheckCircle, XCircle, AlertCircle, Package, Settings, ArrowLeft, LogOut } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const Account = () => {
+    const { user, signInWithGoogle, logout, signup, login } = useAuth();
+    const navigate = useNavigate();
+    const [activeTab, setActiveTab] = useState('dashboard');
     const [isLogin, setIsLogin] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [authLoading, setAuthLoading] = useState(false);
     const [toast, setToast] = useState({ show: false, type: '', message: '' });
 
     const [formData, setFormData] = useState({
@@ -117,15 +122,53 @@ const Account = () => {
         setTimeout(() => setToast({ show: false, type: '', message: '' }), 3000);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
+        
+        if (!formData.email || !formData.password) {
+            showToast('error', 'Please fill in all required fields');
+            return;
+        }
 
-        // Simulate API call
-        setTimeout(() => {
-            setIsSubmitting(false);
-            showToast('info', 'Authentication feature coming soon! Your form is valid.');
-        }, 1500);
+        if (!isLogin && (!formData.name || formData.password !== formData.confirmPassword)) {
+            showToast('error', 'Please ensure all signup fields are valid');
+            return;
+        }
+
+        setAuthLoading(true);
+
+        try {
+            if (isLogin) {
+                await login(formData.email, formData.password);
+                showToast('success', 'Logged in successfully!');
+                navigate('/');
+            } else {
+                await signup(formData.email, formData.password, formData.name);
+                showToast('success', 'Account created! Please check your email to verify.');
+                navigate('/verify-email');
+            }
+        } catch (error) {
+            console.error(error);
+            showToast('error', error.message || 'Authentication failed');
+        } finally {
+            setAuthLoading(false);
+        }
+    };
+
+    const handleGoogleLogin = async () => {
+        if (!import.meta.env.VITE_FIREBASE_API_KEY) {
+            showToast('error', 'Vite did not load the API Key. Please refresh browser (F5)!');
+            return;
+        }
+
+        try {
+            await signInWithGoogle();
+            showToast('success', 'Logged in with Google successfully!');
+            setTimeout(() => navigate('/'), 1000);
+        } catch (error) {
+            console.error(error);
+            showToast('error', `Login failed: ${error.message}`);
+        }
     };
 
     // Reset validation when switching between login/signup
@@ -157,6 +200,83 @@ const Account = () => {
             )}
 
             <div className="max-w-md mx-auto">
+                {user ? (
+                    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 border border-white/20 dark:border-gray-700 animate-fadeIn">
+                        {activeTab === 'dashboard' && (
+                            <div className="text-center">
+                                <div className="w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 shadow-glow overflow-hidden">
+                                    {user.photoURL ? (
+                                        <img src={user.photoURL} alt={user.displayName} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <span className="text-3xl font-bold text-white uppercase">{user.displayName ? user.displayName.charAt(0) : user.email?.charAt(0) || 'U'}</span>
+                                    )}
+                                </div>
+                                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">Welcome, {user.displayName || 'User'}!</h2>
+                                <p className="text-gray-600 dark:text-gray-300 mb-8">{user.email}</p>
+                                
+                                <div className="space-y-4">
+                                    <button onClick={() => setActiveTab('orders')} className="w-full flex items-center justify-center gap-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-800 dark:text-white py-3 px-6 rounded-xl font-medium transition-colors border border-gray-200 dark:border-gray-600">
+                                        <Package size={20} /> My Orders
+                                    </button>
+                                    <button onClick={() => setActiveTab('settings')} className="w-full flex items-center justify-center gap-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-800 dark:text-white py-3 px-6 rounded-xl font-medium transition-colors border border-gray-200 dark:border-gray-600">
+                                        <Settings size={20} /> Edit Profile
+                                    </button>
+                                    <button onClick={() => { setActiveTab('dashboard'); logout(); navigate('/'); }} className="w-full flex items-center justify-center gap-2 bg-error/10 hover:bg-error/20 text-error py-3 px-6 rounded-xl font-medium transition-colors mt-4">
+                                        <LogOut size={20} /> Sign Out
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'orders' && (
+                            <div className="animate-fadeIn">
+                                <button onClick={() => setActiveTab('dashboard')} className="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary mb-6 transition-colors">
+                                    <ArrowLeft size={20} className="mr-2" /> Back to Dashboard
+                                </button>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2"><Package className="text-primary"/> My Orders</h3>
+                                
+                                <div className="space-y-4">
+                                    <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 text-center border border-dashed border-gray-300 dark:border-gray-600">
+                                        <Package size={48} className="mx-auto text-gray-400 mb-3" />
+                                        <p className="text-gray-600 dark:text-gray-300 font-medium">No orders yet</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Looks like you haven't made your choice yet.</p>
+                                        <Link to="/products" className="inline-block mt-4 bg-primary text-white px-6 py-2 rounded-lg text-sm font-semibold hover:bg-orange-600 transition-colors shadow-button hover:shadow-button-hover btn-ripple">Start Shopping</Link>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'settings' && (
+                            <div className="animate-fadeIn">
+                                <button onClick={() => setActiveTab('dashboard')} className="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary mb-6 transition-colors">
+                                    <ArrowLeft size={20} className="mr-2" /> Back to Dashboard
+                                </button>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2"><Settings className="text-primary"/> Account Settings</h3>
+                                
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
+                                        <input type="text" readOnly value={user.displayName || 'User'} className="w-full px-4 py-2 border rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-200 dark:border-gray-600 cursor-not-allowed opacity-70" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+                                        <input type="email" readOnly value={user.email} className="w-full px-4 py-2 border rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-200 dark:border-gray-600 cursor-not-allowed opacity-70" />
+                                    </div>
+                                    <div className="pb-2">
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Account Provider</label>
+                                        <div className="px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 capitalize inline-block border border-gray-200 dark:border-gray-700">
+                                            {user.providerData && user.providerData.length > 0 ? user.providerData[0].providerId : 'Google'}
+                                        </div>
+                                    </div>
+                                    <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                                        <button onClick={() => showToast('success', 'Profile settings are up to date.')} className="w-full bg-gradient-primary text-white py-3 rounded-xl font-semibold shadow-button hover:shadow-glow hover:-translate-y-0.5 transform transition-all btn-ripple">Save Changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <>
                 {/* Header */}
                 <div className="text-center mb-6 sm:mb-8 animate-fadeIn">
                     <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 shadow-glow animate-pulse-slow">
@@ -409,10 +529,10 @@ const Account = () => {
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            disabled={isSubmitting}
+                            disabled={authLoading}
                             className="w-full bg-gradient-primary text-white py-3 sm:py-3.5 px-6 rounded-xl font-semibold hover:shadow-glow-lg transition-all transform hover:-translate-y-0.5 disabled:opacity-70 disabled:transform-none flex items-center justify-center gap-2 shadow-button hover:shadow-button-hover btn-ripple min-h-[44px] text-sm sm:text-base"
                         >
-                            {isSubmitting ? (
+                            {authLoading ? (
                                 <>
                                     <Loader2 className="animate-spin" size={20} />
                                     Processing...
@@ -450,7 +570,8 @@ const Account = () => {
 
                         <div className="mt-4 sm:mt-6 grid grid-cols-2 gap-3 sm:gap-4">
                             <button
-                                onClick={() => showToast('info', 'Google login coming soon!')}
+                                type="button"
+                                onClick={handleGoogleLogin}
                                 className="flex items-center justify-center px-4 py-3 border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all transform hover:-translate-y-0.5 shadow-sm hover:shadow-md min-h-[44px]"
                             >
                                 <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -473,6 +594,8 @@ const Account = () => {
                         </div>
                     </div>
                 </div>
+                    </>
+                )}
             </div>
         </div>
     );

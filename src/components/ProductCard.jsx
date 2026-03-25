@@ -3,17 +3,20 @@ import { Link } from 'react-router-dom';
 import { Star, ShoppingCart, Eye, Heart } from 'lucide-react';
 import { useWishlist } from '../context/WishlistContext';
 import QuickViewModal from './QuickViewModal';
+import useHaptic from '../hooks/useHaptic';
 
 const ProductCard = ({ product }) => {
     const [isAdding, setIsAdding] = useState(false);
     const [showQuickView, setShowQuickView] = useState(false);
     const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
     const inWishlist = isInWishlist(product.id);
+    const haptic = useHaptic();
 
     const handleQuickView = (e) => {
         e.preventDefault();
         e.stopPropagation();
         setShowQuickView(true);
+        haptic.light();
     };
 
     const handleWishlistToggle = (e) => {
@@ -23,6 +26,7 @@ const ProductCard = ({ product }) => {
         } else {
             addToWishlist(product);
         }
+        haptic.medium();
     };
 
     return (
@@ -66,12 +70,12 @@ const ProductCard = ({ product }) => {
                     </button>
                 </div>
 
-                <Link to={`/product/${product.id}`} className="block mb-3 sm:mb-4 overflow-hidden rounded-lg bg-gray-50 dark:bg-gray-700 relative">
+                <Link to={`/product/${product.id}`} className="block mb-3 sm:mb-4 overflow-hidden rounded-lg bg-white relative">
                     <img
                         src={product.images[0]}
                         alt={product.name}
                         loading="lazy"
-                        className="w-full h-32 sm:h-40 lg:h-48 object-contain group-hover:scale-110 transition-transform duration-500"
+                        className="w-full h-40 sm:h-48 lg:h-56 object-contain p-2 group-hover:scale-110 transition-transform duration-500"
                     />
                     {/* Gradient overlay on hover */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

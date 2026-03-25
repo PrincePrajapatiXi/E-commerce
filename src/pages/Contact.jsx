@@ -56,8 +56,8 @@ const Contact = () => {
                                 <div>
                                     <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1">Email Us</h3>
                                     <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">We'll respond within 24 hours</p>
-                                    <a href="mailto:support@catchy.com" className="text-primary hover:underline text-xs sm:text-sm md:text-base">
-                                        support@catchy.com
+                                    <a href="mailto:princeprajapti2589@gmail.com" className="text-primary hover:underline text-xs sm:text-sm md:text-base">
+                                        princeprajapti2589@gmail.com
                                     </a>
                                 </div>
                             </div>
@@ -71,8 +71,8 @@ const Contact = () => {
                                 <div>
                                     <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1">Call Us</h3>
                                     <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">Available 24/7</p>
-                                    <a href="tel:+911234567890" className="text-primary hover:underline text-xs sm:text-sm md:text-base">
-                                        +91 123 456 7890
+                                    <a href="tel:+917905841037" className="text-primary hover:underline text-xs sm:text-sm md:text-base">
+                                        +91 79058 41037
                                     </a>
                                 </div>
                             </div>
@@ -87,29 +87,18 @@ const Contact = () => {
                                     <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1">Visit Us</h3>
                                     <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">Our office location</p>
                                     <p className="text-gray-700 text-xs sm:text-sm md:text-base">
-                                        123 Tech Street, Electronics Hub<br />
-                                        New Delhi, India 110001
+                                        Orai, Uttar Pradesh, India
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Business Hours */}
+                        {/* Availability */}
                         <div className="bg-gradient-to-br from-primary to-orange-600 p-4 sm:p-5 md:p-6 rounded-xl text-white">
-                            <h3 className="text-sm sm:text-base md:text-lg font-bold mb-3 sm:mb-4">Business Hours</h3>
+                            <h3 className="text-sm sm:text-base md:text-lg font-bold mb-3 sm:mb-4">We're Always Open</h3>
                             <div className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
-                                <div className="flex justify-between">
-                                    <span>Monday - Friday</span>
-                                    <span className="font-semibold">9:00 AM - 6:00 PM</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span>Saturday</span>
-                                    <span className="font-semibold">10:00 AM - 4:00 PM</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span>Sunday</span>
-                                    <span className="font-semibold">Closed</span>
-                                </div>
+                                <p>Our online store is available <strong>24/7</strong>. Browse and shop anytime, anywhere!</p>
+                                <p className="mt-2">For queries, email us and we'll respond within 24 hours.</p>
                             </div>
                         </div>
                     </div>
