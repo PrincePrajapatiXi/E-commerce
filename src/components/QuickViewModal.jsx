@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, Star, ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
+import StarRating from './StarRating';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
@@ -135,29 +136,21 @@ const QuickViewModal = ({ product, isOpen, onClose }) => {
                         </h2>
 
                         {/* Rating */}
-                        <div className="flex items-center gap-2 mb-4">
-                            <div className="flex">
-                                {[...Array(5)].map((_, i) => (
-                                    <Star
-                                        key={i}
-                                        size={18}
-                                        className={i < product.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}
-                                    />
-                                ))}
-                            </div>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">({product.rating}/5)</span>
+                        <div className="mb-4">
+                            <StarRating rating={product.rating} size={18} />
                         </div>
 
                         {/* Price */}
-                        <div className="flex items-baseline gap-3 mb-4">
-                            <span className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-primary">
-                                ₹{product.price.toLocaleString()}
-                            </span>
-                            {product.oldPrice && (
-                                <span className="text-lg text-gray-400 line-through">
-                                    ₹{product.oldPrice.toLocaleString()}
+                        <div className="mb-4">
+                            <div className="flex items-center gap-3">
+                                <span className="text-[#CC0C39] text-2xl font-light">-{product.discount}%</span>
+                                <span className="text-3xl font-bold text-[#111]">
+                                    ₹{product.price.toLocaleString()}
                                 </span>
-                            )}
+                            </div>
+                            <div className="text-[#565959] text-sm">
+                                M.R.P.: <span className="line-through">₹{(product.mrp || product.price * 1.5).toLocaleString()}</span>
+                            </div>
                         </div>
 
                         {/* Description */}
@@ -170,12 +163,21 @@ const QuickViewModal = ({ product, isOpen, onClose }) => {
                             <div className="mb-6">
                                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Key Features:</h3>
                                 <ul className="space-y-1">
-                                    {product.features.slice(0, 4).map((feature, idx) => (
-                                        <li key={idx} className="text-sm text-gray-600 dark:text-gray-300 flex items-center gap-2">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                                            {feature}
-                                        </li>
-                                    ))}
+                                    {product?.features?.slice(0, 4).map((feature, idx) => {
+                                        let displayValue;
+                                        if (typeof feature === 'string') {
+                                            displayValue = feature;
+                                        } else if (typeof feature === 'object' && feature !== null) {
+                                            displayValue = `${feature.label}: ${feature.value}`;
+                                        }
+
+                                        return (
+                                            <li key={idx} className="text-sm text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                                                {displayValue}
+                                            </li>
+                                        );
+                                    })}
                                 </ul>
                             </div>
                         )}

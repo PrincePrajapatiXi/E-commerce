@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Star, ShoppingCart, Eye, Heart } from 'lucide-react';
+import StarRating from './StarRating';
 import { useWishlist } from '../context/WishlistContext';
 import QuickViewModal from './QuickViewModal';
 import useHaptic from '../hooks/useHaptic';
@@ -9,7 +10,7 @@ const ProductCard = ({ product }) => {
     const [isAdding, setIsAdding] = useState(false);
     const [showQuickView, setShowQuickView] = useState(false);
     const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-    const inWishlist = isInWishlist(product.id);
+    const inWishlist = isInWishlist(product?.id);
     const haptic = useHaptic();
 
     const handleQuickView = (e) => {
@@ -70,10 +71,10 @@ const ProductCard = ({ product }) => {
                     </button>
                 </div>
 
-                <Link to={`/product/${product.id}`} className="block mb-3 sm:mb-4 overflow-hidden rounded-lg bg-white relative">
+                <Link to={`/product/${product?.id}`} className="block mb-3 sm:mb-4 overflow-hidden rounded-lg bg-white relative">
                     <img
-                        src={product.images[0]}
-                        alt={product.name}
+                        src={product?.images?.[0]}
+                        alt={product?.name}
                         loading="lazy"
                         className="w-full h-40 sm:h-48 lg:h-56 object-contain p-2 group-hover:scale-110 transition-transform duration-500"
                     />
@@ -82,41 +83,31 @@ const ProductCard = ({ product }) => {
                 </Link>
 
                 <div className="flex-grow">
-                    <Link to={`/product/${product.id}`}>
+                    <Link to={`/product/${product?.id}`}>
                         <h4 className="text-sm sm:text-base lg:text-lg font-semibold text-gray-800 dark:text-white mb-2 hover:text-primary transition-colors line-clamp-2 min-h-[40px] sm:min-h-[3rem]">
-                            {product.name}
+                            {product?.name}
                         </h4>
                     </Link>
 
-                    <div className="flex items-center gap-1 mb-2">
-                        {[...Array(5)].map((_, i) => (
-                            <Star
-                                key={i}
-                                size={14}
-                                className={`w-3 h-3 sm:w-4 sm:h-4 transition-all duration-200 ${i < product.rating
-                                    ? 'text-yellow-400 fill-current'
-                                    : 'text-gray-300 dark:text-gray-600'
-                                    }`}
-                            />
-                        ))}
-                        <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 ml-1">({product.rating})</span>
+                    <div className="mb-2">
+                        <StarRating rating={product?.rating} size={14} />
                     </div>
 
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2 hidden sm:block">
-                        {product.description}
-                    </p>
                 </div>
 
-                <div className="mt-auto pt-3 border-t border-gray-100 dark:border-gray-700 space-y-2 sm:space-y-3">
-                    <div className="flex items-center justify-between">
-                        <p className="text-sm sm:text-lg lg:text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                            ₹ {product.price.toLocaleString()}
-                        </p>
-                        {product.oldPrice && (
-                            <p className="text-[10px] sm:text-sm text-gray-400 line-through">
-                                ₹ {product.oldPrice.toLocaleString()}
-                            </p>
-                        )}
+                <div className="mt-auto pt-3 border-t border-gray-100 dark:border-gray-700 space-y-2">
+                    <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                            <span className="bg-[#CC0C39] text-white text-[12px] font-bold px-1.5 py-0.5 rounded-[4px]">
+                                {product?.discount}% off
+                            </span>
+                            <span className="text-[#111] dark:text-white font-bold text-lg">
+                                ₹{product?.price?.toLocaleString()}
+                            </span>
+                        </div>
+                        <div className="text-[#565959] text-xs">
+                            M.R.P.: <span className="line-through">₹{(product?.mrp || (product?.price ? product.price * 1.5 : 0))?.toLocaleString()}</span>
+                        </div>
                     </div>
 
                     {/* View Details Button */}

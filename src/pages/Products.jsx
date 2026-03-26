@@ -34,7 +34,7 @@ const Products = () => {
     }, [location.state]);
 
     const applyFilters = () => {
-        let result = products.filter(p => p.id !== 11); // Exclude Samsung (ID 11)
+        let result = products.filter(p => p.id !== 0); // Exclude Samsung (ID 0)
 
         // Apply search filter
         if (searchQuery) {
@@ -121,7 +121,7 @@ const Products = () => {
 
                 {/* Desktop Filters */}
                 <div className="hidden md:flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-8 sm:mb-10 md:mb-12">
-                    {['all', 'laptop', 'monitor', 'accessory', 'mobile', 'gaming'].map(cat => (
+                    {['all', ...new Set(products.map(p => p.category).filter(Boolean))].map(cat => (
                         <button
                             key={cat}
                             onClick={() => setFilter(cat)}

@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // CLERK AUTH
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Menu, X, Search, Sun, Moon } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import { UserButton } from '@clerk/clerk-react'; // CLERK AUTH
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const { getCartCount } = useCart();
     const { isDark, toggleTheme } = useTheme();
-    const { user, logout } = useAuth();
+    const { user } = useAuth(); // CLERK AUTH — user from Clerk via AuthContext wrapper
     const navigate = useNavigate();
 
     const handleSearch = (e) => {
@@ -47,7 +48,7 @@ const Navbar = () => {
                         <Link to="/contact" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium transform hover:scale-110 transition-all duration-200">Contact</Link>
                         
                             {!user && (
-    <Link to="/account" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium transform hover:scale-110 transition-all duration-200">Account</Link>
+    <Link to="/sign-in" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium transform hover:scale-110 transition-all duration-200">Account</Link>
 )}
                         
                     </nav>
@@ -89,19 +90,17 @@ const Navbar = () => {
                             )}
                         </Link>
 
+                        {/* CLERK AUTH — UserButton replaces manual avatar */}
                         {user && (
-    <Link to="/account" className="relative flex items-center transform hover:scale-110 transition-all duration-200 focus:outline-none">
-        <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-primary shadow-sm hover:shadow-md transition-shadow">
-            {user.photoURL ? (
-                <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
-            ) : (
-                <div className="w-full h-full bg-gradient-primary flex items-center justify-center text-white font-bold text-sm uppercase">
-                    {user.displayName ? user.displayName.charAt(0) : (user.email ? user.email.charAt(0) : 'U')}
-                </div>
-            )}
-        </div>
-    </Link>
-)}
+                            <UserButton
+                                afterSignOutUrl="/"
+                                appearance={{
+                                    elements: {
+                                        avatarBox: 'w-9 h-9 border-2 border-primary shadow-sm hover:shadow-md transition-shadow'
+                                    }
+                                }}
+                            />
+                        )}
 
                         {/* Mobile menu button */}
                         <div className="md:hidden">
@@ -144,12 +143,13 @@ const Navbar = () => {
                             <Link to="/about" className="block text-gray-700 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>About</Link>
                             <Link to="/contact" className="block text-gray-700 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Contact</Link>
                             
+                            {/* CLERK AUTH — Show profile or sign-in link in mobile menu */}
                             {user ? (
                                 <Link to="/account" className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 block" onClick={() => setIsMenuOpen(false)}>
                                     <div className="flex items-center space-x-3 px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
                                         <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary shadow-sm">
-                                            {user.photoURL ? (
-                                                <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
+                                            {user.imageUrl ? (
+                                                <img src={user.imageUrl} alt="Profile" className="w-full h-full object-cover" />
                                             ) : (
                                                 <div className="w-full h-full bg-gradient-primary flex items-center justify-center text-white font-bold text-sm uppercase">
                                                     {user.displayName ? user.displayName.charAt(0) : (user.email ? user.email.charAt(0) : 'U')}
@@ -164,7 +164,7 @@ const Navbar = () => {
                                     <div className="px-3 py-3 block text-center mt-2 text-primary hover:text-primary/80 font-medium">View Profile Dashboard</div>
                                 </Link>
                             ) : (
-                                <Link to="/account" className="block text-gray-700 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Account</Link>
+                                <Link to="/sign-in" className="block text-gray-700 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Account</Link>
                             )}
 
                             {/* Mobile Theme Toggle */}
@@ -184,4 +184,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

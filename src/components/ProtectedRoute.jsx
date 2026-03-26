@@ -1,25 +1,24 @@
-import React from 'react';
+import React from 'react'; // CLERK AUTH
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '@clerk/clerk-react';
 
+// CLERK AUTH — Protected route using Clerk's useAuth() hook directly
 const ProtectedRoute = ({ children }) => {
-  const { user, isLoading } = useAuth();
+  const { isLoaded, isSignedIn } = useAuth();
   const location = useLocation();
 
-  if (isLoading) {
+  // CLERK AUTH — Show loading spinner while Clerk loads
+  if (!isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full"></div>
       </div>
     );
   }
 
-  if (!user) {
-    return <Navigate to="/account" state={{ from: location }} replace />;
-  }
-
-  if (!user.isEmailVerified) {
-    return <Navigate to="/verify-email" replace />;
+  // CLERK AUTH — Redirect to sign-in if not authenticated
+  if (!isSignedIn) {
+    return <Navigate to="/sign-in" state={{ from: location }} replace />;
   }
 
   return children;

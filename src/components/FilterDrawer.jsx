@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { X, SlidersHorizontal, RotateCcw } from 'lucide-react';
+import { products } from '../data/products';
 
 const FilterDrawer = ({ isOpen, onClose, filters, onApply }) => {
     const [localCategory, setLocalCategory] = useState(filters.category || 'all');
     const [localPriceRange, setLocalPriceRange] = useState(filters.priceRange || { min: 0, max: 200000 });
 
-    const categories = ['all', 'laptop', 'monitor', 'accessory', 'mobile', 'gaming'];
+    const categories = ['all', ...new Set(products.map(p => p.category).filter(Boolean))];
 
     const handleApply = () => {
         onApply({

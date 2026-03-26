@@ -9,7 +9,7 @@ import Newsletter from '../components/Newsletter';
 import RecentlyViewed from '../components/RecentlyViewed';
 import StatsCounter from '../components/StatsCounter';
 import FeaturedProducts from '../components/FeaturedProducts';
-import { TrendingUp, Zap, Award, Sparkles, ShoppingBag, Clock } from 'lucide-react';
+
 
 const Home = () => {
     const [filter, setFilter] = useState('all');
@@ -18,7 +18,7 @@ const Home = () => {
     const searchQuery = location.state?.searchQuery || '';
 
     useEffect(() => {
-        let result = products.filter(p => p.id !== 11); // Exclude Samsung (ID 11) from main listing
+        let result = products.filter(p => p.id !== 0); // Exclude Samsung (ID 0) from main listing
 
         // Apply search filter
         if (searchQuery) {
@@ -37,10 +37,10 @@ const Home = () => {
     }, [filter, searchQuery]);
 
     // Product sections data
-    const bestSellers = products.filter(p => p.rating === 5 && p.id !== 11);
+    const bestSellers = products.filter(p => p.rating === 5 && p.id !== 0);
     const trendingNow = products.filter(p => p.category.includes('gaming') || p.category.includes('mobile'));
     const dealsOfTheDay = products.filter(p => p.oldPrice || p.price < 50000);
-    const topRated = [...products].sort((a, b) => b.rating - a.rating).filter(p => p.id !== 11);
+    const topRated = [...products].sort((a, b) => b.rating - a.rating).filter(p => p.id !== 0);
     const newArrivals = products.slice(-4).reverse();
     const laptops = products.filter(p => p.category.includes('laptop'));
 
@@ -191,38 +191,45 @@ const Home = () => {
             </div>
 
             {/* Special Offers */}
-            <div id="special-offers" className="bg-gradient-to-br from-gray-50 to-gray-100 py-10 sm:py-12 md:py-16">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-[1.02] transition-transform duration-300">
-                        <div className="flex flex-col md:flex-row">
+            {(() => {
+                const specialProductId = 0; // Change this ID to switch products
+                const specialProduct = products.find(p => p.id === specialProductId);
+                if (!specialProduct) return null;
 
-                            <div className="md:w-1/2 p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-center">
-                                <span className="text-primary text-sm sm:text-sm font-bold tracking-wider uppercase mb-2 sm:mb-2">Limited Time Offer</span>
-                                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 md:mb-4">Special Sunday Offers</h2>
-                                <p className="text-sm sm:text-base md:text-base text-gray-600 mb-5 sm:mb-6 md:mb-8">
-                                    Get exclusive deals on premium electronics. These offers refresh every Sunday, so don't miss out on your chance to save big!
-                                </p>
-                                <div className="flex items-end gap-3 sm:gap-4 md:gap-4 mb-5 sm:mb-6 md:mb-8">
-                                    <span className="text-3xl sm:text-4xl md:text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">₹ 89,999</span>
-                                    <span className="text-base sm:text-lg md:text-xl text-gray-400 line-through mb-1">₹ 1,29,999</span>
+                return (
+                    <div id="special-offers" className="bg-gradient-to-br from-gray-50 to-gray-100 py-10 sm:py-12 md:py-16">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-[1.02] transition-transform duration-300">
+                                <div className="flex flex-col md:flex-row">
+                                    <div className="md:w-1/2 p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-center">
+                                        <span className="text-primary text-sm sm:text-sm font-bold tracking-wider uppercase mb-2 sm:mb-2">Limited Time Offer</span>
+                                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 md:mb-4">Special Sunday Offers</h2>
+                                        <p className="text-sm sm:text-base md:text-base text-gray-600 mb-5 sm:mb-6 md:mb-8">
+                                            Get exclusive deals on premium electronics. These offers refresh every Sunday, so don't miss out on your chance to save big!
+                                        </p>
+                                        <div className="flex items-end gap-3 sm:gap-4 md:gap-4 mb-5 sm:mb-6 md:mb-8">
+                                            <span className="text-3xl sm:text-4xl md:text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">₹ {specialProduct.price.toLocaleString()}</span>
+                                            <span className="text-base sm:text-lg md:text-xl text-gray-400 line-through mb-1">₹ {(specialProduct.mrp || specialProduct.price * 1.5).toLocaleString()}</span>
+                                        </div>
+                                        <Link to={`/product/${specialProduct.id}`} className="bg-gradient-dark hover:shadow-glow-lg text-white px-6 py-3 sm:px-8 sm:py-4 md:px-10 md:py-4 rounded-xl text-sm sm:text-base font-bold transition-all w-fit inline-flex items-center justify-center gap-2 transform hover:-translate-y-1 hover:scale-105 min-h-[44px] shadow-button-hover btn-ripple group">
+                                            <span>Grab Deal Now</span>
+                                            <span className="transform group-hover:translate-x-1 transition-transform">→</span>
+                                        </Link>
+                                    </div>
+                                    <div className="md:w-1/2 bg-gradient-to-br from-gray-100 to-gray-200 relative min-h-[300px] sm:min-h-[400px] flex items-center justify-center p-2 sm:p-6">
+                                        <img
+                                            src={specialProduct.images[0]}
+                                            alt={specialProduct.name}
+                                            loading="lazy"
+                                            className="w-full h-full object-contain hover:scale-110 transition-transform duration-500 max-h-[300px] sm:max-h-[580px] drop-shadow-2xl"
+                                        />
+                                    </div>
                                 </div>
-                                <Link to="/product/11" className="bg-gradient-dark hover:shadow-glow-lg text-white px-6 py-3 sm:px-8 sm:py-4 md:px-10 md:py-4 rounded-xl text-sm sm:text-base font-bold transition-all w-fit inline-flex items-center justify-center gap-2 transform hover:-translate-y-1 hover:scale-105 min-h-[44px] shadow-button-hover btn-ripple group">
-                                    <span>Grab Deal Now</span>
-                                    <span className="transform group-hover:translate-x-1 transition-transform">→</span>
-                                </Link>
-                            </div>
-                            <div className="md:w-1/2 bg-gradient-to-br from-gray-100 to-gray-200 relative min-h-[250px] sm:min-h-[300px]">
-                                <img
-                                    src="/images/Samsung s25 ultra.png"
-                                    alt="Special Offer"
-                                    loading="lazy"
-                                    className="absolute inset-0 w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500"
-                                />
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                );
+            })()}
 
             {/* Divider */}
             <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent max-w-7xl mx-auto"></div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; // CLERK AUTH
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -15,7 +15,8 @@ import ReturnPolicy from './pages/ReturnPolicy';
 import RefundPolicy from './pages/RefundPolicy';
 import TermsAndConditions from './pages/TermsAndConditions';
 import Checkout from './pages/Checkout';
-import VerifyEmail from './pages/VerifyEmail';
+import SignInPage from './pages/SignInPage'; // CLERK AUTH
+import SignUpPage from './pages/SignUpPage'; // CLERK AUTH
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import { CartProvider } from './context/CartContext';
@@ -61,8 +62,11 @@ function App() {
                       <Route path="/products" element={<Products />} />
                       <Route path="/about" element={<About />} />
                       <Route path="/contact" element={<Contact />} />
-                      <Route path="/verify-email" element={<VerifyEmail />} />
-                      <Route path="/account" element={<Account />} />
+                      {/* CLERK AUTH — Sign in/up routes with wildcard for Clerk sub-paths */}
+                      <Route path="/sign-in/*" element={<SignInPage />} />
+                      <Route path="/sign-up/*" element={<SignUpPage />} />
+                      {/* CLERK AUTH — Account/Dashboard routes */}
+                      <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
                       <Route path="/account/profile" element={<ProtectedRoute><Account /></ProtectedRoute>} />
                       <Route path="/dashboard" element={<ProtectedRoute><Account /></ProtectedRoute>} />
                       <Route path="/privacy" element={<PrivacyPolicy />} />
