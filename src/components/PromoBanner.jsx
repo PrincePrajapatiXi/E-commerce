@@ -1,31 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { X, Zap, Clock } from 'lucide-react';
+import { getSaleEndTime } from '../utils/saleTimer';
 
 const PromoBanner = () => {
     const [isVisible, setIsVisible] = useState(true);
     const [timeLeft, setTimeLeft] = useState({
-        hours: 23,
-        minutes: 59,
-        seconds: 59
+        hours: 0,
+        minutes: 0,
+        seconds: 0
     });
+
+    const endTime = getSaleEndTime();
 
     // Countdown timer
     useEffect(() => {
+        const calculateTimeLeft = () => {
+            const difference = +new Date(endTime) - +new Date();
+            let newTimeLeft = { hours: 0, minutes: 0, seconds: 0 };
+
+            if (difference > 0) {
+                newTimeLeft = {
+                    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+                    minutes: Math.floor((difference / 1000 / 60) % 60),
+                    seconds: Math.floor((difference / 1000) % 60)
+                };
+            }
+            return newTimeLeft;
+        };
+
+        setTimeLeft(calculateTimeLeft());
+        
         const timer = setInterval(() => {
-            setTimeLeft(prev => {
-                if (prev.seconds > 0) {
-                    return { ...prev, seconds: prev.seconds - 1 };
-                } else if (prev.minutes > 0) {
-                    return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-                } else if (prev.hours > 0) {
-                    return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
-                }
-                return prev;
-            });
+            setTimeLeft(calculateTimeLeft());
         }, 1000);
 
         return () => clearInterval(timer);
-    }, []);
+    }, [endTime]);
 
     // Check if banner was closed in this session
     useEffect(() => {

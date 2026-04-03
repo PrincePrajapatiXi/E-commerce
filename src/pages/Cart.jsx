@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Trash2, ArrowLeft, ShoppingBag } from 'lucide-react';
+import { Trash2, ArrowLeft, ShoppingBag, ShoppingCart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import SEO from '../components/SEO';
+import Breadcrumb from '../components/Breadcrumb';
+import EmptyState from '../components/EmptyState';
 import useHaptic from '../hooks/useHaptic';
 
 const Cart = () => {
@@ -30,12 +32,7 @@ const Cart = () => {
     if (cart.length === 0) {
         return (
             <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
-                <ShoppingCart size={64} className="text-gray-300 mb-6" />
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Your cart is empty</h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-8">Add some products to get started!</p>
-                <Link to="/" className="bg-primary text-white px-8 py-3 rounded-full font-semibold hover:bg-red-600 transition">
-                    Continue Shopping
-                </Link>
+                <EmptyState type="cart" />
             </div>
         );
     }
@@ -44,6 +41,7 @@ const Cart = () => {
         <>
             <SEO title="Shopping Cart - Catchy Electronics" description="Review your selected items and proceed to secure checkout." />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pb-40 md:pb-12">
+                <Breadcrumb items={[{ label: 'Cart' }]} />
                 <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Shopping Cart</h1>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -210,25 +208,5 @@ const Cart = () => {
         </>
     );
 };
-
-// Helper icon component
-const ShoppingCart = ({ size, className }) => (
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width={size}
-        height={size}
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={className}
-    >
-        <circle cx="9" cy="21" r="1"></circle>
-        <circle cx="20" cy="21" r="1"></circle>
-        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-    </svg>
-);
 
 export default Cart;

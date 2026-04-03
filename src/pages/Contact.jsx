@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, Loader2 } from 'lucide-react';
+import Breadcrumb from '../components/Breadcrumb';
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -35,8 +36,11 @@ const Contact = () => {
     };
 
     return (
-        <div className="bg-gray-50 py-8 sm:py-12 md:py-16">
+        <div className="bg-gray-50 dark:bg-gray-900 py-8 sm:py-12 md:py-16 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* Breadcrumb */}
+                <Breadcrumb items={[{ label: 'Contact' }]} />
+
                 {/* Header */}
                 <div className="text-center mb-8 sm:mb-12 md:mb-16">
                     <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3 md:mb-4">Get In Touch</h1>

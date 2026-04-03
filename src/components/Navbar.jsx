@@ -5,29 +5,13 @@ import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import { UserButton } from '@clerk/clerk-react'; // CLERK AUTH
+import SearchAutocomplete from './SearchAutocomplete';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
     const { getCartCount } = useCart();
     const { isDark, toggleTheme } = useTheme();
     const { user } = useAuth(); // CLERK AUTH — user from Clerk via AuthContext wrapper
-    const navigate = useNavigate();
-
-    const handleSearch = (e) => {
-        e.preventDefault();
-        if (searchQuery.trim()) {
-            navigate('/', { state: { searchQuery: searchQuery.trim() } });
-            setSearchQuery('');
-            setIsMenuOpen(false);
-        }
-    };
-
-    const handleSearchKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            handleSearch(e);
-        }
-    };
 
     return (
         <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-glass shadow-md dark:shadow-gray-900/50 sticky top-0 z-50 transition-all duration-300">
@@ -55,21 +39,8 @@ const Navbar = () => {
 
                     {/* Search, Theme Toggle, and Cart */}
                     <div className="flex items-center space-x-3 sm:space-x-4">
-                        <div className="hidden sm:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1 hover:shadow-md transition-shadow">
-                            <input
-                                type="text"
-                                placeholder="Search products..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                onKeyPress={handleSearchKeyPress}
-                                className="bg-transparent border-none focus:outline-none text-sm w-32 lg:w-48 dark:text-gray-200 dark:placeholder-gray-400"
-                            />
-                            <button
-                                onClick={handleSearch}
-                                className="text-gray-500 dark:text-gray-400 hover:text-primary transition-colors"
-                            >
-                                <Search size={18} />
-                            </button>
+                        <div className="hidden sm:block">
+                            <SearchAutocomplete isMobile={false} />
                         </div>
 
                         {/* Theme Toggle */}
@@ -121,21 +92,8 @@ const Navbar = () => {
                     <div className="md:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-glass border-t border-gray-200 dark:border-gray-700 shadow-lg animate-slideDown absolute top-16 left-0 right-0 h-screen z-50 overflow-y-auto pb-20">
                         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                             {/* Mobile Search */}
-                            <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-2 mb-3 mx-2">
-                                <input
-                                    type="text"
-                                    placeholder="Search products..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    onKeyPress={handleSearchKeyPress}
-                                    className="bg-transparent border-none focus:outline-none text-sm w-full dark:text-gray-200 dark:placeholder-gray-400"
-                                />
-                                <button
-                                    onClick={handleSearch}
-                                    className="text-gray-500 dark:text-gray-400 hover:text-primary transition-colors"
-                                >
-                                    <Search size={18} />
-                                </button>
+                            <div className="mb-3 mx-2">
+                                <SearchAutocomplete isMobile={true} onClose={() => setIsMenuOpen(false)} />
                             </div>
 
                             <Link to="/" className="block text-gray-700 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-3 rounded-md text-base font-medium transition-all min-h-[44px]" onClick={() => setIsMenuOpen(false)}>Home</Link>

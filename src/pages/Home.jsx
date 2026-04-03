@@ -9,7 +9,8 @@ import Newsletter from '../components/Newsletter';
 import RecentlyViewed from '../components/RecentlyViewed';
 import StatsCounter from '../components/StatsCounter';
 import FeaturedProducts from '../components/FeaturedProducts';
-
+import FlashSaleTimer from '../components/FlashSaleTimer';
+import { getSaleEndTime } from '../utils/saleTimer';
 
 const Home = () => {
     const [filter, setFilter] = useState('all');
@@ -88,6 +89,14 @@ const Home = () => {
             {/* Trust Badges */}
             <TrustBadges />
 
+            {/* Flash Sale Section */}
+            <div id="special-offers" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16">
+                <FlashSaleTimer endTime={getSaleEndTime()} />
+                <div className="mt-8">
+                    <ProductSection title="" products={dealsOfTheDay.slice(0, 4)} />
+                </div>
+            </div>
+
             {/* Featured Categories - 3 distinct cards as per spec */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
                 {/* Shop by Category */}
@@ -148,8 +157,8 @@ const Home = () => {
             {/* Featured Products */}
             <div id="featured" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-10 md:mb-12 relative inline-block w-full animate-fadeIn">
-                    <span className="relative z-10 bg-white px-4">Featured Products</span>
-                    <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-transparent -z-0"></div>
+                    <span className="relative z-10 bg-white dark:bg-gray-900 px-4 text-gray-900 dark:text-white">Featured Products</span>
+                    <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent -z-0"></div>
                 </h2>
 
                 {/* Filters */}

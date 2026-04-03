@@ -1,9 +1,16 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ShoppingBag, Users, Award, TrendingUp } from 'lucide-react';
+import Breadcrumb from '../components/Breadcrumb';
 
 const About = () => {
     return (
-        <div className="bg-gray-50">
+        <div className="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+            {/* Breadcrumb */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+                <Breadcrumb items={[{ label: 'About Us' }]} />
+            </div>
+
             {/* Hero Section */}
             <div className="bg-gradient-to-r from-primary to-orange-600 text-white py-8 sm:py-12 md:py-16 lg:py-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

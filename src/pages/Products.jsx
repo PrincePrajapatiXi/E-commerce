@@ -4,8 +4,10 @@ import ProductCard from '../components/ProductCard';
 import SEO from '../components/SEO';
 import FilterDrawer from '../components/FilterDrawer';
 import { products } from '../data/products';
-import { SlidersHorizontal, Loader2 } from 'lucide-react';
+import { SlidersHorizontal, Loader2, ChevronDown } from 'lucide-react';
 import usePullToRefresh from '../hooks/usePullToRefresh';
+import Breadcrumb from '../components/Breadcrumb';
+import EmptyState from '../components/EmptyState';
 
 const Products = () => {
     const location = useLocation();
@@ -13,6 +15,7 @@ const Products = () => {
     const [filter, setFilter] = useState(location.state?.category || 'all');
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [priceRange, setPriceRange] = useState({ min: 0, max: 200000 });
+    const [sortBy, setSortBy] = useState('featured');
     const [isLoading, setIsLoading] = useState(true);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -52,6 +55,17 @@ const Products = () => {
         // Apply price filter
         result = result.filter(p => p.price >= priceRange.min && p.price <= priceRange.max);
 
+        // Apply Sort
+        if (sortBy === 'price-low') {
+            result.sort((a, b) => a.price - b.price);
+        } else if (sortBy === 'price-high') {
+            result.sort((a, b) => b.price - a.price);
+        } else if (sortBy === 'rating') {
+            result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        } else if (sortBy === 'discount') {
+            result.sort((a, b) => (b.discount || 0) - (a.discount || 0));
+        }
+
         setFilteredProducts(result);
     };
 
@@ -63,7 +77,7 @@ const Products = () => {
             setIsLoading(false);
         }, 300);
         return () => clearTimeout(timer);
-    }, [filter, searchQuery, priceRange]);
+    }, [filter, searchQuery, priceRange, sortBy]);
 
     // Handle filter drawer apply
     const handleFilterApply = (filters) => {
@@ -98,6 +112,9 @@ const Products = () => {
             )}
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* Breadcrumb */}
+                <Breadcrumb items={[{ label: 'Products' }]} />
+
                 {/* Page Title */}
                 <h1 className="text-3xl sm:text-4xl md:text-4xl font-bold text-center mb-8 sm:mb-10 md:mb-12 animate-fadeIn text-gray-900 dark:text-white">
                     Our Products
@@ -119,20 +136,42 @@ const Products = () => {
                     </button>
                 </div>
 
-                {/* Desktop Filters */}
-                <div className="hidden md:flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-8 sm:mb-10 md:mb-12">
-                    {['all', ...new Set(products.map(p => p.category).filter(Boolean))].map(cat => (
-                        <button
-                            key={cat}
-                            onClick={() => setFilter(cat)}
-                            className={`px-4 py-2 sm:px-5 sm:py-2 md:px-6 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 transform hover:scale-105 min-h-[44px] ${filter === cat
-                                ? 'bg-gradient-primary text-white shadow-glow'
-                                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 shadow-md'
-                                }`}
-                        >
-                            {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                        </button>
-                    ))}
+                {/* Desktop Filters & Sort */}
+                <div className="hidden md:flex flex-wrap justify-between items-center gap-4 mb-4 sm:mb-6 md:mb-8 bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    {/* Categories */}
+                    <div className="flex flex-wrap gap-2">
+                        {['all', ...new Set(products.map(p => p.category).filter(Boolean))].map(cat => (
+                            <button
+                                key={cat}
+                                onClick={() => setFilter(cat)}
+                                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === cat
+                                    ? 'bg-gradient-primary text-white shadow-glow'
+                                    : 'bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                    }`}
+                            >
+                                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Sort */}
+                    <div className="flex items-center gap-3">
+                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Sort by:</span>
+                        <div className="relative">
+                            <select
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value)}
+                                className="appearance-none bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 py-2 pl-4 pr-10 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
+                            >
+                                <option value="featured">Featured</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="rating">Top Rated</option>
+                                <option value="discount">Biggest Discount</option>
+                            </select>
+                            <ChevronDown className="absolute right-3 top-2.5 text-gray-400 pointer-events-none" size={16} />
+                        </div>
+                    </div>
                 </div>
 
                 {/* Desktop Price Filter */}
@@ -205,15 +244,15 @@ const Products = () => {
 
                 {/* No Results Message */}
                 {!isLoading && filteredProducts.length === 0 && (
-                    <div className="text-center py-12 animate-fadeIn">
-                        <p className="text-gray-600 dark:text-gray-300 text-lg mb-4">No products found{searchQuery && ` for "${searchQuery}"`}</p>
-                        <button
-                            onClick={() => window.location.href = '/products'}
-                            className="bg-gradient-primary text-white px-8 py-3 rounded-lg hover:shadow-glow transition-all transform hover:-translate-y-1 min-h-[44px]"
-                        >
-                            View All Products
-                        </button>
-                    </div>
+                    <EmptyState
+                        type="search"
+                        title={searchQuery ? `No products found for "${searchQuery}"` : "No products found"}
+                        description={searchQuery ? "Try checking your spelling or use more general terms." : "We couldn't find any products in this category or price range."}
+                        actionText="Clear All Filters"
+                        onAction={() => {
+                            window.location.href = '/products';
+                        }}
+                    />
                 )}
             </div>
 

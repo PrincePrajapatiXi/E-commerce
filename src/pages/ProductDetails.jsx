@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Star, ShoppingCart, Check, Truck, RotateCcw, ShieldCheck, Award, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Star, ShoppingCart, Check, Truck, RotateCcw, ShieldCheck, Award, ChevronLeft, ChevronRight, Share2, Zap } from 'lucide-react';
 import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
@@ -10,9 +10,11 @@ import SEO from '../components/SEO';
 import { addToRecentlyViewed } from '../components/RecentlyViewed';
 import useSwipeGesture from '../hooks/useSwipeGesture';
 import useHaptic from '../hooks/useHaptic';
+import ReviewSection from '../components/ReviewSection';
 
 const ProductDetails = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const product = products.find(p => p.id === parseInt(id));
     const { addToCart } = useCart();
     const { success } = useToast();
@@ -24,6 +26,22 @@ const ProductDetails = () => {
     const [selectedColor, setSelectedColor] = useState(product?.variations?.color?.[0]?.name || null);
     const [selectedStyle, setSelectedStyle] = useState(product?.variations?.style?.[0]?.name || null);
     const [showAllSpecs, setShowAllSpecs] = useState(false);
+    
+    // Sticky bottom bar logic
+    const [showStickyBar, setShowStickyBar] = useState(false);
+    const mainCtaRef = useRef(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setShowStickyBar(!entry.isIntersecting && window.scrollY > 100);
+            },
+            { threshold: 0, rootMargin: "-100px 0px 0px 0px" }
+        );
+
+        if (mainCtaRef.current) observer.observe(mainCtaRef.current);
+        return () => observer.disconnect();
+    }, []);
 
     // Swipe gesture for image gallery
     const handleSwipeLeft = () => {
@@ -73,6 +91,29 @@ const ProductDetails = () => {
         haptic.success();
         setAdded(true);
         setTimeout(() => setAdded(false), 2000);
+    };
+
+    const handleBuyNow = () => {
+        addToCart(product, quantity);
+        haptic.success();
+        navigate('/checkout');
+    };
+
+    const handleShare = async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: product.name,
+                    text: `Check out ${product.name} on Catchy Electronics!`,
+                    url: window.location.href,
+                });
+            } catch (err) {
+                console.log('Share error or canceled');
+            }
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            success('Link copied to clipboard!');
+        }
     };
 
     // Smart Related Products - shows products from same category, excluding current product
@@ -179,10 +220,15 @@ const ProductDetails = () => {
 
                     {/* Product Info */}
                     <div>
-                        {/* 1. Breadcrumb */}
-                        <nav className="text-sm text-gray-500 mb-4">
-                            <Link to="/" className="hover:text-primary">Home</Link> / <span className="text-gray-900">{product.name.length > 40 ? product.name.slice(0, 40) + '...' : product.name}</span>
-                        </nav>
+                        {/* 1. Breadcrumb and Share */}
+                        <div className="flex items-center justify-between mb-4">
+                            <nav className="text-sm text-gray-500">
+                                <Link to="/" className="hover:text-primary">Home</Link> / <span className="text-gray-900 dark:text-gray-300">{product.name.length > 30 ? product.name.slice(0, 30) + '...' : product.name}</span>
+                            </nav>
+                            <button onClick={handleShare} className="p-2 text-gray-500 hover:text-primary hover:bg-primary/10 rounded-full transition-colors" title="Share Product">
+                                <Share2 size={18} />
+                            </button>
+                        </div>
 
                         {/* 2. Product Title */}
                         {product?.badge && (
@@ -310,47 +356,69 @@ const ProductDetails = () => {
                             </div>
                         )}
 
-                        {/* 7. Quantity + Add to Cart */}
-                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-10 border-b border-gray-100 pb-10">
-                            <div className="flex items-center border-2 border-gray-300 rounded-lg w-full sm:w-auto overflow-hidden">
-                                <button
-                                    onClick={() => { setQuantity(Math.max(1, quantity - 1)); haptic.light(); }}
-                                    className="px-4 py-2 hover:bg-gray-100 transition-colors font-semibold text-lg min-w-[44px] text-gray-900 active:bg-gray-200"
-                                >
-                                    -
-                                </button>
-                                <input
-                                    type="number"
-                                    value={quantity}
-                                    readOnly
-                                    className="w-12 text-center border-none focus:ring-0 font-semibold bg-transparent text-gray-900"
-                                />
-                                <button
-                                    onClick={() => { setQuantity(quantity + 1); haptic.light(); }}
-                                    className="px-4 py-2 hover:bg-gray-100 transition-colors font-semibold text-lg min-w-[44px] text-gray-900 active:bg-gray-200"
-                                >
-                                    +
-                                </button>
+                        {/* 7. Quantity + Add to Cart + Buy Now */}
+                        <div ref={mainCtaRef} className="flex flex-col gap-4 mb-10 border-b border-gray-100 dark:border-gray-800 pb-10">
+                            
+                            {/* Stock Indicator */}
+                            <div className="flex items-center gap-2">
+                                <span className={`text-sm font-semibold ${(product.stock === undefined || product.stock > 0) ? 'text-green-600 dark:text-green-400' : 'text-red-500'}`}>
+                                    {(product.stock === undefined || product.stock > 0) ? 'In Stock' : 'Out of Stock'}
+                                </span>
                             </div>
 
-                            <button
-                                onClick={handleAddToCart}
-                                disabled={added}
-                                className={`flex-1 flex items-center justify-center px-8 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-[1.02] shadow-md active:scale-95 ${added
-                                        ? 'bg-green-500 text-white'
-                                        : 'bg-[#FFD814] hover:bg-[#F7CA00] text-[#111] border border-[#F2C200]'
+                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                                <div className="flex items-center border-2 border-gray-300 dark:border-gray-600 rounded-lg w-full sm:w-auto overflow-hidden bg-white dark:bg-gray-800">
+                                    <button
+                                        onClick={() => { setQuantity(Math.max(1, quantity - 1)); haptic.light(); }}
+                                        className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-semibold text-lg min-w-[44px] text-gray-900 dark:text-white active:bg-gray-200"
+                                    >
+                                        -
+                                    </button>
+                                    <input
+                                        type="number"
+                                        value={quantity}
+                                        readOnly
+                                        className="w-12 text-center border-none focus:ring-0 font-semibold bg-transparent text-gray-900 dark:text-white"
+                                    />
+                                    <button
+                                        onClick={() => { setQuantity(quantity + 1); haptic.light(); }}
+                                        className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-semibold text-lg min-w-[44px] text-gray-900 dark:text-white active:bg-gray-200"
+                                    >
+                                        +
+                                    </button>
+                                </div>
+
+                                <button
+                                    onClick={handleAddToCart}
+                                    disabled={added || (product.stock === 0)}
+                                    className={`flex-1 flex items-center justify-center px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:-translate-y-0.5 shadow-md ${added
+                                            ? 'bg-green-500 text-white'
+                                            : (product.stock === 0)
+                                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                                : 'bg-white text-gray-900 border-2 border-primary hover:bg-primary/5'
+                                        }`}
+                                >
+                                    {added ? (
+                                        <>
+                                            <Check className="mr-2" size={20} /> Added
+                                        </>
+                                    ) : (
+                                        <>
+                                            <ShoppingCart className="mr-2 text-primary" size={20} /> Add to Cart
+                                        </>
+                                    )}
+                                </button>
+
+                                <button
+                                    onClick={handleBuyNow}
+                                    disabled={product.stock === 0}
+                                    className={`flex-1 flex items-center justify-center px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:-translate-y-0.5 shadow-md ${
+                                        product.stock === 0 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gradient-primary text-white hover:shadow-glow inline-flex'
                                     }`}
-                            >
-                                {added ? (
-                                    <>
-                                        <Check className="mr-2" size={20} /> Added to Cart
-                                    </>
-                                ) : (
-                                    <>
-                                        <ShoppingCart className="mr-2" size={20} /> Add to Cart
-                                    </>
-                                )}
-                            </button>
+                                >
+                                    <Zap className="mr-2" size={20} /> Buy Now
+                                </button>
+                            </div>
                         </div>
 
                         {/* 8. Specifications Table */}
@@ -435,9 +503,13 @@ const ProductDetails = () => {
                                 ))}
                             </ul>
                         </div>
+                        
+                        {/* 10. Reviews Section */}
+                        <ReviewSection productId={product.id} />
                     </div>
                 </div>
 
+ 
                 {/* Related Products Section */}
                 {relatedProducts.length > 0 && (
                     <div className="mt-12 sm:mt-16">
@@ -459,6 +531,47 @@ const ProductDetails = () => {
                         </div>
                     </div>
                 )}
+            </div>
+
+            {/* Mobile Sticky CTA Bar */}
+            <div 
+                className={`fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 p-3 md:hidden z-[60] transition-transform duration-300 shadow-xl ${
+                    showStickyBar ? 'translate-y-0' : 'translate-y-full'
+                }`}
+                style={{ height: '72px' }}
+            >
+                <div className="flex items-center justify-between gap-3 h-full max-w-md mx-auto">
+                    <div className="flex flex-col min-w-[30%]">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">Total Price</span>
+                        <span className="text-sm font-bold text-gray-900 dark:text-white">
+                            ₹{((product.price + (product.variations?.style?.find(s => s.name === selectedStyle)?.price_modifier || 0)) * quantity).toLocaleString()}
+                        </span>
+                    </div>
+                    <div className="flex gap-2 w-full">
+                        <button
+                            onClick={handleAddToCart}
+                            disabled={added || (product.stock === 0)}
+                            className={`flex-1 px-2 py-2.5 rounded-lg font-bold text-sm transition-all shadow-sm ${added
+                                    ? 'bg-green-500 text-white'
+                                    : (product.stock === 0)
+                                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                        : 'bg-white text-gray-900 border-2 border-primary'
+                                }`}
+                        >
+                            {added ? 'Added' : 'Add to Cart'}
+                        </button>
+
+                        <button
+                            onClick={handleBuyNow}
+                            disabled={product.stock === 0}
+                            className={`flex-1 px-2 py-2.5 rounded-lg font-bold text-sm transition-all shadow-sm ${
+                                product.stock === 0 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gradient-primary text-white'
+                            }`}
+                        >
+                            Buy Now
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );

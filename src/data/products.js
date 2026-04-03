@@ -47,6 +47,37 @@ export const products = [
     },
 
     // ─────────────────────────────────────────────
+    // 1a. Mechanical Gaming Keyboard
+    // ─────────────────────────────────────────────
+    {
+        id: 1,
+        name: "Cosmic Byte CB-GK-18 Firefly RGB Mechanical Keyboard",
+        price: 2899,
+        mrp: 4999,
+        discount: 42,
+        rating: 4,
+        stock: 0,
+        category: "accessory gaming",
+        images: [
+            "/images/Gaming Headphone.png",
+        ],
+        features: [
+            { label: "Switch Type",      value: "Outemu Blue Mechanical" },
+            { label: "Lighting",         value: "Per-Key RGB" },
+            { label: "Layout",           value: "Full Size (104 Keys)" },
+            { label: "Connectivity",     value: "USB Wired" },
+            { label: "Anti-Ghosting",    value: "N-Key Rollover" },
+        ],
+        description: `【Outemu Blue Switches】 Tactile clicky mechanical switches with a satisfying typing experience and 50 million keystroke lifespan.
+
+【Per-Key RGB Lighting】 Fully customizable RGB backlighting with multiple lighting modes and effects.
+
+【N-Key Rollover】 Full anti-ghosting with N-key rollover ensures every keypress is registered, even during intense gaming sessions.
+
+【Durable Build】 Aircraft-grade aluminum top plate with double-shot keycaps for long-lasting legends.`,
+    },
+
+    // ─────────────────────────────────────────────
     // 2. Portronics Toad One Mouse
     // ─────────────────────────────────────────────
     {

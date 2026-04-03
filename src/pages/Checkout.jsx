@@ -3,6 +3,7 @@ import { useCart } from '../context/CartContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { Check, CreditCard, Truck, ArrowLeft, ArrowRight, ShoppingBag } from 'lucide-react';
 import SEO from '../components/SEO';
+import Breadcrumb from '../components/Breadcrumb';
 
 const Checkout = () => {
     const { cart, getCartTotal, clearCart } = useCart();
@@ -131,6 +132,7 @@ const Checkout = () => {
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <SEO title="Checkout - Catchy Electronics" description="Complete your purchase securely." />
+            <Breadcrumb items={[{ label: 'Cart', link: '/cart' }, { label: 'Checkout' }]} />
             {/* Steps Indicator */}
             <div className="mb-12">
                 <div className="flex items-center justify-center">
